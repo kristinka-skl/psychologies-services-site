@@ -16,7 +16,10 @@ export default function HomePage() {
             own life guide with experienced psychologists.
           </p>
           <Link className={css.cta} href='/psychologists'>
-            Get started
+            <span>Get started</span>
+            <span className={css.ctaIcon} aria-hidden='true'>
+              ↗
+            </span>
           </Link>
         </div>
 

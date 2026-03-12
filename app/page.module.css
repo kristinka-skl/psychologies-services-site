@@ -37,14 +37,22 @@
 
 .cta {
   width: fit-content;
-  min-height: 44px;
+  min-height: 56px;
   border-radius: var(--radius-30);
   background: var(--color-brand);
   color: var(--color-bg-surface);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px var(--space-24);
+  gap: var(--space-8);
+  padding: 16px 40px;
+  font-size: var(--font-size-20);
+  line-height: var(--line-height-24);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+.ctaIcon {
   font-size: var(--font-size-20);
   line-height: var(--line-height-24);
 }
@@ -216,6 +224,12 @@
   .heroMedia {
     width: 464px;
     margin-top: 54px;
+  }
+
+  .cta {
+    height: 60px;
+    min-height: 60px;
+    padding: 18px 50px;
   }
 
   .heroImageWrap {
