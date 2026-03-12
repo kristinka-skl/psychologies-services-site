@@ -1,5 +1,5 @@
 .page {
-  background: #dfe7e3;
+  background: var(--color-bg-surface);
   min-height: calc(100dvh - 72px);
   padding: var(--space-24) 0 var(--space-40);
 }
@@ -13,7 +13,7 @@
 
 .heroContent {
   display: grid;
-  gap: var(--space-16);
+  gap: var(--space-20);
 }
 
 .title {
@@ -33,38 +33,130 @@
   font-size: var(--font-size-18);
   line-height: var(--line-height-24);
   max-width: 40ch;
+  letter-spacing: -0.02em;  
+  display: block;
+  margin-bottom: var(--space-20);
 }
 
 .cta {
   width: fit-content;
-  min-height: 44px;
+  min-height: 56px;
   border-radius: var(--radius-30);
   background: var(--color-brand);
   color: var(--color-bg-surface);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px var(--space-24);
+  gap: var(--space-8);
+  padding: 16px 40px;
+  font-size: var(--font-size-20);
+  line-height: var(--line-height-24);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+.ctaIcon {
   font-size: var(--font-size-20);
   line-height: var(--line-height-24);
 }
 
 .heroMedia {
-  display: grid;
-  gap: var(--space-16);
+  width: min(100%, 464px);
+  margin: 0 auto;
+}
+
+.heroImageWrap {
+  position: relative;
+  width: 100%;
 }
 
 .heroImage {
   width: 100%;
-  border-radius: var(--radius-20);
+  height: auto;
+  border-radius: var(--radius-10);
   object-fit: cover;
+  object-position: center;
+}
+
+.questionBadge {
+  position: absolute;
+  left: -12px;
+  top: 41%;
+  transform: translateY(-50%) rotate(-15deg);
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-10);
+  background: var(--color-accent-violet);
+  color: var(--color-bg-surface);
+  display: grid;
+  place-items: center;
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  z-index: 2;
+}
+
+.usersBadge {
+  position: absolute;
+  top: 12px;
+  right: -12px;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-13);
+  background: var(--color-accent-yellow);
+  display: grid;
+  place-items: center;
+  transform: rotate(14deg);
+  transform-origin: center;
+  color: var(--color-bg-surface);
+  z-index: 2;
+}
+
+.usersBadge svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-bg-surface);
+  fill: var(--color-bg-surface);
+}
+
+.usersBadge use {
+  fill: var(--color-bg-surface);
 }
 
 .statCard {
+  position: absolute;
+  left: -8px;
+  bottom: 18px;
   width: fit-content;
   border-radius: var(--radius-20);
   background: var(--color-brand);
-  padding: var(--space-16) var(--space-24);
+  padding: var(--space-12) var(--space-16);
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  z-index: 2;
+}
+
+.statIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-14);
+  background: var(--color-bg-surface);
+  color: var(--color-brand);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.statIcon svg {
+  width: 22px;
+  height: 22px;
+  color: var(--color-brand);
+  fill: var(--color-brand);
+}
+
+.statIcon use {
+  fill: var(--color-brand);
 }
 
 .statLabel {
@@ -94,16 +186,110 @@
   .title {
     font-size: 60px;
   }
+
+  .heroMedia {
+    margin-left: auto;
+  }
+
+  .questionBadge {
+    left: -18px;
+    top: 42%;
+    width: 36px;
+    height: 36px;
+  }
+
+  .usersBadge {
+    top: 20px;
+    right: -22px;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-14);
+  }
+
+  .usersBadge svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .statCard {
+    left: -56px;
+    bottom: 34px;
+    padding: var(--space-16) var(--space-24);
+    gap: var(--space-16);
+  }
+
+  .statIcon {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 @media (min-width: 1440px) {
   .container {
     width: min(100% - 256px, var(--container-max-width));
+    align-items: start;
   }
 
   .title {
     font-size: var(--font-size-80);
     line-height: var(--line-height-82);
     letter-spacing: var(--letter-spacing-tight-xl);
+  }
+
+  .heroMedia {
+    width: 464px;
+    margin-top: 54px;
+  }
+
+  .cta {
+    height: 60px;
+    min-height: 60px;
+    padding: 18px 50px;
+  }
+
+  .heroImageWrap {
+    width: 464px;
+  }
+
+  .questionBadge {
+    left: -39px;
+    top: 195px;
+    width: 49px;
+    height: 49px;
+    font-size: var(--font-size-18);
+  }
+
+  .usersBadge {
+    top: 54px;
+    right: -48px;
+    width: 59px;
+    height: 59px;
+    border-radius: var(--radius-14);
+    transform: rotate(14deg);
+  }
+
+  .usersBadge svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .statCard {
+    left: -101px;
+    bottom: 75px;
+    width: 311px;
+    min-height: 118px;
+    padding: 32px;
+    gap: var(--space-16);
+    border-radius: var(--radius-20);
+  }
+
+  .statIcon {
+    width: 54px;
+    height: 54px;
+  }
+  .description {
+   max-width: 460px;
+   font-weight: 500;
+   max-height: 72px;
   }
 }

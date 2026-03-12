@@ -17,7 +17,7 @@
   --color-white: #ffffff;
 
   /* Typography */
-  --font-family-base: 'Inter', Arial, Helvetica, sans-serif;
+  --font-family-base: var(--font-inter-sans), 'Inter', sans-serif;
   --font-size-14: 14px;
   --font-size-16: 16px;
   --font-size-18: 18px;
@@ -96,6 +96,16 @@ body {
   font-family: var(--font-family-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: var(--font-family-base);
+}
+
+input,
+select,
+textarea {
+  font-family: var(--font-family-base);
 }
 
 * {

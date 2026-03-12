@@ -16,22 +16,47 @@ export default function HomePage() {
             own life guide with experienced psychologists.
           </p>
           <Link className={css.cta} href='/psychologists'>
-            Get started
+            <span>Get started</span>
+            <span className={css.ctaIcon} aria-hidden='true'>
+              ↗
+            </span>
           </Link>
         </div>
 
         <div className={css.heroMedia}>
-          <Image
-            className={css.heroImage}
-            src='https://images.unsplash.com/photo-1551843073-4a9a5b6fcd5f?auto=format&fit=crop&w=900&q=80'
-            alt='Psychologist during consultation'
-            width={464}
-            height={526}
-            unoptimized
-          />
-          <div className={css.statCard}>
-            <p className={css.statLabel}>Experienced psychologists</p>
-            <p className={css.statValue}>15,000</p>
+          <div className={css.heroImageWrap}>
+            <Image
+              className={css.heroImage}
+              src='/images/hero/psychologist-hero.png'
+              alt='Psychologist in glasses during a consultation'
+              width={464}
+              height={526}
+              priority
+              quality={90}
+              sizes='(min-width: 1440px) 464px, (min-width: 768px) 42vw, 92vw'
+            />
+
+            <div className={css.questionBadge} aria-hidden='true'>
+              ?
+            </div>
+
+            <div className={css.usersBadge} aria-hidden='true'>
+              <svg viewBox='0 0 24 24' role='img' aria-hidden='true'>
+                <use href='/sprite.svg#icon-users' />
+              </svg>
+            </div>
+
+            <div className={css.statCard}>
+              <div className={css.statIcon} aria-hidden='true'>
+                <svg viewBox='0 0 24 24' role='img' aria-hidden='true'>
+                  <use href='/sprite.svg#icon-check' />
+                </svg>
+              </div>
+              <div>
+                <p className={css.statLabel}>Experienced psychologists</p>
+                <p className={css.statValue}>15,000</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -91,22 +91,33 @@
   gap: var(--space-12);
 }
 
+.drawerActions .primaryButton,
+.drawerActions .secondaryButton {
+  width: 100%;
+}
+
 .primaryButton,
 .secondaryButton {
-  min-height: 44px;
+  height: 48px;
   border-radius: var(--radius-30);
-  padding: 0 var(--space-24);
+  padding-inline: var(--space-20);
   font-size: var(--font-size-16);
+  line-height: var(--line-height-20);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
 }
 
 .primaryButton {
+  padding-block: 14px;
   border: 0;
   background: var(--color-brand);
   color: var(--color-bg-surface);
 }
 
 .secondaryButton {
+  padding-block: 13px;
   border: 1px solid var(--color-border-primary);
   background: transparent;
   color: var(--color-text-primary);
@@ -121,6 +132,7 @@
 @media (min-width: 768px) {
   .container {
     width: min(100% - 64px, var(--container-max-width));
+    min-height: 84px;
   }
 
   .desktopNav {
@@ -155,6 +167,20 @@
     align-items: center;
   }
 
+  .desktopActions .primaryButton,
+  .desktopActions .secondaryButton {
+    width: auto;
+    padding-inline: var(--space-20);
+  }
+
+  .desktopActions .secondaryButton {
+    min-width: 92px;
+  }
+
+  .desktopActions .primaryButton {
+    min-width: 160px;
+  }
+
   .burgerButton {
     display: none;
   }
@@ -163,5 +189,19 @@
 @media (min-width: 1440px) {
   .container {
     width: min(100% - 256px, var(--container-max-width));
+    min-height: 96px;
+  }
+
+  .desktopActions .primaryButton,
+  .desktopActions .secondaryButton {
+    padding-inline: var(--space-24);
+  }
+
+  .desktopActions .secondaryButton {
+    min-width: 95px;
+  }
+
+  .desktopActions .primaryButton {
+    min-width: 171px;
   }
 }
