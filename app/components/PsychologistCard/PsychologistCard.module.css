@@ -1,0 +1,182 @@
+.card {
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-24);
+  padding: var(--space-16);
+  display: grid;
+  gap: var(--space-16);
+}
+
+.topRow {
+  display: grid;
+  gap: var(--space-12);
+}
+
+.profileBlock {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+}
+
+.avatarWrap {
+  width: 84px;
+  height: 84px;
+  border-radius: var(--radius-24);
+  border: 2px solid var(--color-border-brand-soft);
+  background: var(--color-bg-avatar-neutral);
+  padding: var(--space-8);
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-15);
+  object-fit: cover;
+}
+
+.role {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-18);
+}
+
+.name {
+  margin-top: var(--space-4);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-24);
+  line-height: var(--line-height-24);
+}
+
+.metaBlock {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  align-items: center;
+}
+
+.metaText {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-24);
+}
+
+.price {
+  color: var(--color-price);
+}
+
+.favoriteButton,
+.favoriteButtonActive {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border-primary);
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.favoriteButtonActive {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.chip {
+  border-radius: var(--radius-24);
+  background: var(--color-bg-page);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-20);
+  padding: var(--space-8) var(--space-12);
+}
+
+.chip span {
+  color: var(--color-text-primary);
+}
+
+.about {
+  color: var(--color-text-muted-50);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-20);
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.aboutExpanded {
+  color: var(--color-text-muted-50);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-20);
+}
+
+.readMore {
+  justify-self: start;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-24);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.reviews {
+  display: grid;
+  gap: var(--space-12);
+  border-top: 1px solid var(--color-border-primary);
+  padding-top: var(--space-12);
+}
+
+.reviewsTitle {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-18);
+}
+
+.reviewItem {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-20);
+}
+
+.reviewHead {
+  margin-bottom: var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.appointmentButton {
+  justify-self: start;
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--radius-30);
+  background: var(--color-brand);
+  color: var(--color-bg-surface);
+  padding: 0 var(--space-24);
+  font-size: var(--font-size-16);
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding: var(--space-24);
+  }
+
+  .topRow {
+    grid-template-columns: 1fr auto;
+    align-items: start;
+  }
+
+  .metaBlock {
+    justify-content: flex-end;
+  }
+
+  .avatarWrap {
+    width: 120px;
+    height: 120px;
+  }
+}

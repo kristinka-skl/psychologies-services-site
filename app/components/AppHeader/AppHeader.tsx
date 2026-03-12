@@ -1,0 +1,166 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useAuthStore } from '@/app/store/authStore';
+import { useUiStore } from '@/app/store/uiStore';
+import css from '@/app/components/AppHeader/AppHeader.module.css';
+
+export default function AppHeader() {
+  const pathname = usePathname();
+  const user = useAuthStore((state) => state.user);
+  const signOut = useAuthStore((state) => state.signOut);
+  const openAuthModal = useUiStore((state) => state.openAuthModal);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const closeDrawer = () => setIsDrawerOpen(false);
+
+  useEffect(() => {
+    if (!isDrawerOpen) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeDrawer();
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isDrawerOpen]);
+
+  return (
+    <header className={css.header}>
+      <div className={css.container}>
+        <Link className={css.logo} href='/'>
+          <span className={css.logoAccent}>psychologists</span>.services
+        </Link>
+
+        <nav className={css.desktopNav} aria-label='Primary navigation'>
+          <Link className={pathname === '/' ? css.active : ''} href='/'>
+            Home
+          </Link>
+          <Link
+            className={pathname === '/psychologists' ? css.active : ''}
+            href='/psychologists'
+          >
+            Psychologists
+          </Link>
+          <Link
+            className={pathname === '/favorites' ? css.active : ''}
+            href='/favorites'
+          >
+            Favorites
+          </Link>
+        </nav>
+
+        <div className={css.desktopActions}>
+          {user ? (
+            <>
+              <p className={css.userName}>{user.name}</p>
+              <button className={css.secondaryButton} type='button' onClick={signOut}>
+                Log out
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className={css.secondaryButton}
+                type='button'
+                onClick={() => openAuthModal('login')}
+              >
+                Log In
+              </button>
+              <button
+                className={css.primaryButton}
+                type='button'
+                onClick={() => openAuthModal('register')}
+              >
+                Registration
+              </button>
+            </>
+          )}
+        </div>
+
+        <button
+          className={css.burgerButton}
+          type='button'
+          aria-label='Open menu'
+          onClick={() => setIsDrawerOpen(true)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+      </div>
+
+      {isDrawerOpen ? (
+        <div className={css.drawerBackdrop} onClick={closeDrawer} role='presentation'>
+          <aside
+            className={css.drawer}
+            onClick={(event) => event.stopPropagation()}
+            aria-label='Mobile menu'
+          >
+            <button className={css.drawerClose} type='button' onClick={closeDrawer}>
+              ×
+            </button>
+            <nav className={css.drawerNav}>
+              <Link href='/' onClick={closeDrawer}>
+                Home
+              </Link>
+              <Link href='/psychologists' onClick={closeDrawer}>
+                Psychologists
+              </Link>
+              <Link href='/favorites' onClick={closeDrawer}>
+                Favorites
+              </Link>
+            </nav>
+            <div className={css.drawerActions}>
+              {user ? (
+                <>
+                  <p className={css.userName}>{user.name}</p>
+                  <button
+                    className={css.secondaryButton}
+                    type='button'
+                    onClick={() => {
+                      signOut();
+                      closeDrawer();
+                    }}
+                  >
+                    Log out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className={css.secondaryButton}
+                    type='button'
+                    onClick={() => {
+                      openAuthModal('login');
+                      closeDrawer();
+                    }}
+                  >
+                    Log In
+                  </button>
+                  <button
+                    className={css.primaryButton}
+                    type='button'
+                    onClick={() => {
+                      openAuthModal('register');
+                      closeDrawer();
+                    }}
+                  >
+                    Registration
+                  </button>
+                </>
+              )}
+            </div>
+          </aside>
+        </div>
+      ) : null}
+    </header>
+  );
+}
