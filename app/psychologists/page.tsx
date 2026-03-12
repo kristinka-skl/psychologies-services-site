@@ -1,16 +1,18 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import PsychologistCard from '@/app/components/PsychologistCard/PsychologistCard';
 import SortFilter, { SortValue } from '@/app/components/SortFilter/SortFilter';
-import { psychologists } from '@/app/constants/psychologists';
+import { getPsychologists } from '@/app/lib/psychologistsApi';
+import { Psychologist } from '@/app/types/psychologist';
 import css from '@/app/psychologists/page.module.css';
 
 const INITIAL_ITEMS = 3;
 const STEP_ITEMS = 3;
 
-function sortPsychologists(value: SortValue) {
-  const data = [...psychologists];
+function sortPsychologists(value: SortValue, source: Psychologist[]) {
+  const data = [...source];
 
   switch (value) {
     case 'a-z':
@@ -33,10 +35,18 @@ function sortPsychologists(value: SortValue) {
 export default function PsychologistsPage() {
   const [sortValue, setSortValue] = useState<SortValue>('a-z');
   const [visibleCount, setVisibleCount] = useState(INITIAL_ITEMS);
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['psychologists'],
+    queryFn: getPsychologists,
+  });
+
+  if (isError) {
+    throw error;
+  }
 
   const sortedPsychologists = useMemo(
-    () => sortPsychologists(sortValue),
-    [sortValue]
+    () => sortPsychologists(sortValue, data || []),
+    [data, sortValue]
   );
 
   const visiblePsychologists = sortedPsychologists.slice(0, visibleCount);
@@ -47,13 +57,17 @@ export default function PsychologistsPage() {
       <section className={css.container}>
         <SortFilter value={sortValue} onChange={setSortValue} />
 
-        <div className={css.cards}>
-          {visiblePsychologists.map((psychologist) => (
-            <PsychologistCard key={psychologist.id} psychologist={psychologist} />
-          ))}
-        </div>
+        {isLoading ? (
+          <p>Loading psychologists...</p>
+        ) : (
+          <div className={css.cards}>
+            {visiblePsychologists.map((psychologist) => (
+              <PsychologistCard key={psychologist.id} psychologist={psychologist} />
+            ))}
+          </div>
+        )}
 
-        {hasMore ? (
+        {!isLoading && hasMore ? (
           <button
             className={css.loadMoreButton}
             type='button'
