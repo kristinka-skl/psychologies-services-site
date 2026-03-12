@@ -1,0 +1,114 @@
+:root {
+  /* Core colors */
+  --color-bg-page: #f3f3f3;
+  --color-bg-surface: #fbfbfb;
+  --color-bg-avatar-neutral: #e0e0e0;
+  --color-text-primary: #191a15;
+  --color-text-muted: #8a8a89;
+  --color-text-muted-50: rgba(25, 26, 21, 0.5);
+  --color-text-muted-30: rgba(25, 26, 21, 0.3);
+  --color-brand: #54be96;
+  --color-price: #38cd3e;
+  --color-accent-violet: #4535af;
+  --color-accent-yellow: #fbc75e;
+  --color-border-primary: rgba(25, 26, 21, 0.2);
+  --color-border-brand-soft: rgba(84, 190, 150, 0.2);
+  --color-star: #ffc531;
+  --color-white: #ffffff;
+
+  /* Typography */
+  --font-family-base: 'Inter', Arial, Helvetica, sans-serif;
+  --font-size-14: 14px;
+  --font-size-16: 16px;
+  --font-size-18: 18px;
+  --font-size-20: 20px;
+  --font-size-24: 24px;
+  --font-size-80: 80px;
+  --line-height-18: 18px;
+  --line-height-20: 20px;
+  --line-height-24: 24px;
+  --line-height-82: 82px;
+  --letter-spacing-tight-xs: -0.16px;
+  --letter-spacing-tight-sm: -0.2px;
+  --letter-spacing-tight-md: -0.36px;
+  --letter-spacing-tight-lg: -0.4px;
+  --letter-spacing-tight-xl: -1.6px;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing scale */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-14: 14px;
+  --space-16: 16px;
+  --space-18: 18px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-96: 96px;
+  --space-104: 104px;
+  --space-120: 120px;
+  --space-128: 128px;
+
+  /* Radius */
+  --radius-10: 10px;
+  --radius-13: 13px;
+  --radius-14: 14px;
+  --radius-15: 15px;
+  --radius-20: 20px;
+  --radius-24: 24px;
+  --radius-30: 30px;
+  --radius-pill: 9999px;
+
+  /* Elevation */
+  --shadow-dropdown: 0 20px 69px 0 rgba(0, 0, 0, 0.07);
+
+  /* Layout */
+  --container-max-width: 1440px;
+  --layout-gutter-desktop: 128px;
+  --card-width-desktop: 1184px;
+
+  /* Breakpoints (mobile-first) */
+  --bp-mobile: 320px;
+  --bp-tablet: 768px;
+  --bp-desktop: 1440px;
+
+  /* Compatibility aliases */
+  --background: var(--color-bg-page);
+  --foreground: var(--color-text-primary);
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+html {
+  color-scheme: light;
+}

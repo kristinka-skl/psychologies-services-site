@@ -1,0 +1,109 @@
+.page {
+  background: #dfe7e3;
+  min-height: calc(100dvh - 72px);
+  padding: var(--space-24) 0 var(--space-40);
+}
+
+.container {
+  width: min(100% - 32px, var(--container-max-width));
+  margin: 0 auto;
+  display: grid;
+  gap: var(--space-24);
+}
+
+.heroContent {
+  display: grid;
+  gap: var(--space-16);
+}
+
+.title {
+  color: var(--color-text-primary);
+  font-size: 40px;
+  line-height: 1.05;
+  letter-spacing: -0.8px;
+}
+
+.titleAccent {
+  color: var(--color-brand);
+  font-style: italic;
+}
+
+.description {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-18);
+  line-height: var(--line-height-24);
+  max-width: 40ch;
+}
+
+.cta {
+  width: fit-content;
+  min-height: 44px;
+  border-radius: var(--radius-30);
+  background: var(--color-brand);
+  color: var(--color-bg-surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px var(--space-24);
+  font-size: var(--font-size-20);
+  line-height: var(--line-height-24);
+}
+
+.heroMedia {
+  display: grid;
+  gap: var(--space-16);
+}
+
+.heroImage {
+  width: 100%;
+  border-radius: var(--radius-20);
+  object-fit: cover;
+}
+
+.statCard {
+  width: fit-content;
+  border-radius: var(--radius-20);
+  background: var(--color-brand);
+  padding: var(--space-16) var(--space-24);
+}
+
+.statLabel {
+  color: rgba(251, 251, 251, 0.75);
+  font-size: var(--font-size-14);
+}
+
+.statValue {
+  color: var(--color-bg-surface);
+  font-size: var(--font-size-24);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-24);
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding-top: var(--space-40);
+  }
+
+  .container {
+    width: min(100% - 64px, var(--container-max-width));
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: var(--space-32);
+  }
+
+  .title {
+    font-size: 60px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container {
+    width: min(100% - 256px, var(--container-max-width));
+  }
+
+  .title {
+    font-size: var(--font-size-80);
+    line-height: var(--line-height-82);
+    letter-spacing: var(--letter-spacing-tight-xl);
+  }
+}
