@@ -13,7 +13,7 @@
 
 .heroContent {
   display: grid;
-  gap: var(--space-16);
+  gap: var(--space-20);
 }
 
 .title {
@@ -33,6 +33,9 @@
   font-size: var(--font-size-18);
   line-height: var(--line-height-24);
   max-width: 40ch;
+  letter-spacing: -0.02em;  
+  display: block;
+  margin-bottom: var(--space-20);
 }
 
 .cta {
@@ -105,12 +108,18 @@
   place-items: center;
   transform: rotate(14deg);
   transform-origin: center;
+  color: var(--color-bg-surface);
   z-index: 2;
 }
 
 .usersBadge svg {
   width: 18px;
   height: 18px;
+  color: var(--color-bg-surface);
+  fill: var(--color-bg-surface);
+}
+
+.usersBadge use {
   fill: var(--color-bg-surface);
 }
 
@@ -133,6 +142,7 @@
   height: 40px;
   border-radius: var(--radius-14);
   background: var(--color-bg-surface);
+  color: var(--color-brand);
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -141,6 +151,11 @@
 .statIcon svg {
   width: 22px;
   height: 22px;
+  color: var(--color-brand);
+  fill: var(--color-brand);
+}
+
+.statIcon use {
   fill: var(--color-brand);
 }
 
@@ -271,5 +286,10 @@
   .statIcon {
     width: 54px;
     height: 54px;
+  }
+  .description {
+   max-width: 460px;
+   font-weight: 500;
+   max-height: 72px;
   }
 }

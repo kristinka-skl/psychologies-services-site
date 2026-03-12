@@ -42,17 +42,14 @@ export default function HomePage() {
 
             <div className={css.usersBadge} aria-hidden='true'>
               <svg viewBox='0 0 24 24' role='img' aria-hidden='true'>
-                <path d='M16 11c1.66 0 3-1.79 3-4s-1.34-4-3-4-3 1.79-3 4 1.34 4 3 4Z' />
-                <path d='M8 11c1.66 0 3-1.79 3-4S9.66 3 8 3 5 4.79 5 7s1.34 4 3 4Z' />
-                <path d='M8 13c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4Z' />
-                <path d='M16 13c-.29 0-.62.02-.97.05 1.33.96 2.97 2.36 2.97 3.95v2h6v-2c0-2.66-5.33-4-8-4Z' />
+                <use href='/sprite.svg#icon-users' />
               </svg>
             </div>
 
             <div className={css.statCard}>
               <div className={css.statIcon} aria-hidden='true'>
                 <svg viewBox='0 0 24 24' role='img' aria-hidden='true'>
-                  <path d='M9.55 17.42 4.8 12.67l1.41-1.42 3.34 3.34 8.24-8.24 1.41 1.42-9.65 9.65Z' />
+                  <use href='/sprite.svg#icon-check' />
                 </svg>
               </div>
               <div>
