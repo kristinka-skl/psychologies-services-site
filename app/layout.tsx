@@ -1,7 +1,15 @@
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import AppHeader from '@/app/components/AppHeader/AppHeader';
 import Providers from '@/app/providers/Providers';
 import './globals.css';
+
+const interSans = Inter({
+  variable: '--font-inter-sans',
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Psychologists Services',
@@ -16,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body>
+      <body className={`${interSans.className} ${interSans.variable}`}>
         <Providers>
           <AppHeader />
           {children}

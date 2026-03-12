@@ -231,8 +231,8 @@
   }
 
   .usersBadge {
-    top: 60px;
-    right: -58px;
+    top: 54px;
+    right: -48px;
     width: 59px;
     height: 59px;
     border-radius: var(--radius-14);
