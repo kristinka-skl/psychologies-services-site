@@ -11,6 +11,7 @@ import css from '@/app/components/AppHeader/AppHeader.module.css';
 export default function AppHeader() {
   const pathname = usePathname();
   const user = useAuthStore((state) => state.user);
+  const loading = useAuthStore((state) => state.loading);
   const signOut = useAuthStore((state) => state.signOut);
   const openAuthModal = useUiStore((state) => state.openAuthModal);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -73,15 +74,19 @@ export default function AppHeader() {
           ) : null}
         </nav>
 
-        <div className={css.desktopActions}>
-          {user ? (
+        <div
+          className={`${css.desktopActions} ${user ? css.desktopActionsAuthorized : ''}`}
+        >
+          {loading ? null : user ? (
             <>
-              <span className={css.avatar} aria-hidden='true'>
-                <svg width='16' height='16'>
-                  <use href='/sprite.svg#icon-user' />
-                </svg>
-              </span>
-              <p className={css.userName}>{user.name}</p>
+              <div className={css.userInfo}>
+                <span className={css.avatar} aria-hidden='true'>
+                  <svg width='16' height='16'>
+                    <use href='/sprite.svg#icon-user' />
+                  </svg>
+                </span>
+                <p className={css.userName}>{user.name}</p>
+              </div>
               <button
                 className={css.secondaryButton}
                 type='button'
@@ -131,7 +136,7 @@ export default function AppHeader() {
             aria-label='Mobile menu'
           >
             <button className={css.drawerClose} type='button' onClick={closeDrawer}>
-              \u00d7
+              ×
             </button>
             <nav className={css.drawerNav}>
               <Link href='/' onClick={closeDrawer}>
@@ -147,7 +152,7 @@ export default function AppHeader() {
               ) : null}
             </nav>
             <div className={css.drawerActions}>
-              {user ? (
+              {loading ? null : user ? (
                 <>
                   <div className={css.userInfo}>
                     <span className={css.avatar} aria-hidden='true'>

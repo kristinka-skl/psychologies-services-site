@@ -131,8 +131,9 @@
 .avatar {
   width: 40px;
   height: 40px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-15);
   background: var(--color-brand);
+  color: var(--color-white);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -140,13 +141,18 @@
 }
 
 .avatar svg {
-  fill: var(--color-white);
+  width: 18px;
+  height: 18px;
+  color: currentColor;
+  display: block;
 }
 
 .userInfo {
   display: flex;
   align-items: center;
-  gap: var(--space-8);
+  gap: var(--space-12);
+  min-width: 90px;
+  min-height: 40px;
 }
 
 .userName {
@@ -194,6 +200,10 @@
     align-items: center;
   }
 
+  .desktopActionsAuthorized {
+    gap: 28px;
+  }
+
   .desktopActions .primaryButton,
   .desktopActions .secondaryButton {
     width: auto;
@@ -202,6 +212,11 @@
 
   .desktopActions .secondaryButton {
     min-width: 92px;
+  }
+
+  .desktopActionsAuthorized .secondaryButton {
+    min-width: 135px;
+    height: 48px;
   }
 
   .desktopActions .primaryButton {
@@ -215,7 +230,7 @@
 
 @media (min-width: 1440px) {
   .container {
-    width: min(100% - 256px, var(--container-max-width));
+    width: min(100% - 256px, var(--card-width-desktop));
     min-height: 96px;
   }
 
