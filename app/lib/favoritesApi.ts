@@ -1,4 +1,4 @@
-import { auth } from '@/app/lib/firebaseClient';
+import { auth } from '@/app/lib/firebaseSdk';
 import { requestJson } from '@/app/lib/firebaseRest';
 import { mapLegacyIdsToDatabaseKeys } from '@/app/lib/psychologistsApi';
 

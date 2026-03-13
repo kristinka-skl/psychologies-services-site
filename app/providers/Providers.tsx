@@ -5,7 +5,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { ReactNode, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import AuthModal from '@/app/components/AuthModal/AuthModal';
-import { auth } from '@/app/lib/firebaseClient';
+import { auth } from '@/app/lib/firebaseSdk';
 import { getUserFavoriteIds } from '@/app/lib/favoritesApi';
 import { useAuthStore } from '@/app/store/authStore';
 import { useFavoritesStore } from '@/app/store/favoritesStore';

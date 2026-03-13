@@ -7,7 +7,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { create } from 'zustand';
-import { auth } from '@/app/lib/firebaseClient';
+import { auth } from '@/app/lib/firebaseSdk';
 
 interface AuthUser {
   uid: string;
