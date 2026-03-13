@@ -6,7 +6,9 @@ import { ReactNode, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import AuthModal from '@/app/components/AuthModal/AuthModal';
 import { auth } from '@/app/lib/firebaseClient';
+import { getUserFavoriteIds } from '@/app/lib/favoritesApi';
 import { useAuthStore } from '@/app/store/authStore';
+import { useFavoritesStore } from '@/app/store/favoritesStore';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -15,24 +17,57 @@ interface ProvidersProps {
 function AuthListener() {
   const setUser = useAuthStore((state) => state.setUser);
   const setLoading = useAuthStore((state) => state.setLoading);
+  const setFavorites = useFavoritesStore((state) => state.setFavorites);
+  const clearFavorites = useFavoritesStore((state) => state.clearFavorites);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        setUser({
-          uid: firebaseUser.uid,
-          name: firebaseUser.displayName ?? firebaseUser.email ?? '',
-          email: firebaseUser.email ?? '',
-        });
-      } else {
+    let isMounted = true;
+    let authEventId = 0;
+
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      const currentEventId = ++authEventId;
+
+      if (!firebaseUser) {
         setUser(null);
+        clearFavorites();
+        setLoading(false);
+        return;
       }
 
-      setLoading(false);
+      setUser({
+        uid: firebaseUser.uid,
+        name: firebaseUser.displayName ?? firebaseUser.email ?? '',
+        email: firebaseUser.email ?? '',
+      });
+
+      try {
+        const favoriteIds = await getUserFavoriteIds(firebaseUser.uid);
+
+        if (!isMounted || currentEventId !== authEventId) {
+          return;
+        }
+
+        setFavorites(favoriteIds);
+      } catch {
+        if (!isMounted || currentEventId !== authEventId) {
+          return;
+        }
+
+        clearFavorites();
+      } finally {
+        if (!isMounted || currentEventId !== authEventId) {
+          return;
+        }
+
+        setLoading(false);
+      }
     });
 
-    return unsubscribe;
-  }, [setUser, setLoading]);
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, [setUser, setLoading, setFavorites, clearFavorites]);
 
   return null;
 }
