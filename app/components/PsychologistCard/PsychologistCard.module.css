@@ -4,6 +4,7 @@
   padding: var(--space-16);
   display: grid;
   gap: var(--space-16);
+  position: relative;
 }
 
 .content {
@@ -89,6 +90,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  top: var(--space-16);
+  right: var(--space-16);
 }
 
 .favoriteButtonActive {
@@ -145,11 +149,11 @@
   color: var(--color-text-muted-50);
   font-size: var(--font-size-16);
   line-height: var(--line-height-20);
+  line-clamp: 3;
   display: -webkit-box;
   overflow: hidden;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  
   height: 80px;
 }
 
@@ -172,25 +176,70 @@
 
 .reviews {
   display: grid;
-  gap: var(--space-12);
-  border-top: 1px solid var(--color-border-primary);
-  padding-top: var(--space-12);
+  gap: var(--space-24);
+  margin-top: var(--space-24);
 }
 
 .reviewsTitle {
   color: var(--color-text-primary);
   font-size: var(--font-size-18);
+  line-height: var(--line-height-24);
+}
+
+.reviewsList {
+  display: grid;
+  gap: 25px;
 }
 
 .reviewItem {
+  display: grid;
+  gap: var(--space-16);
+}
+
+.reviewTop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.reviewerBadge {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border-brand-soft);
+  color: var(--color-brand);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-20);
+  line-height: var(--line-height-24);
+}
+
+.reviewerName {
   color: var(--color-text-primary);
-  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-16);
   line-height: var(--line-height-20);
 }
 
-.reviewHead {
-  margin-bottom: var(--space-4);
+.reviewRating {
+  margin-top: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: var(--color-text-muted);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-18);
+}
+
+.reviewRatingIcon {
+  color: var(--color-star);
+}
+
+.reviewComment {
+  color: var(--color-text-muted-50);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-20);
 }
 
 .appointmentButton {
@@ -202,6 +251,7 @@
   color: var(--color-bg-surface);
   padding: 0 var(--space-24);
   font-size: var(--font-size-16);
+  margin-top: var(--space-16);
   cursor: pointer;
 }
 
@@ -226,6 +276,13 @@
     width: 120px;
     height: 120px;
     border-radius: var(--radius-30);
+  }
+
+  .favoriteButton,
+  .favoriteButtonActive {
+    position: static;
+    top: auto;
+    right: auto;
   }
 }
 

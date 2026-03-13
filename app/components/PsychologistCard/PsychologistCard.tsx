@@ -132,14 +132,32 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
         {isExpanded ? (
           <div className={css.reviews}>
             <h4 className={css.reviewsTitle}>Reviews</h4>
-            {psychologist.reviews.map((review) => (
-              <div key={review.reviewer} className={css.reviewItem}>
-                <p className={css.reviewHead}>
-                  {review.reviewer} · {review.rating}
-                </p>
-                <p>{review.comment}</p>
-              </div>
-            ))}
+            <div className={css.reviewsList}>
+              {psychologist.reviews.map((review) => (
+                <div key={review.reviewer} className={css.reviewItem}>
+                  <div className={css.reviewTop}>
+                    <span className={css.reviewerBadge} aria-hidden='true'>
+                      {review.reviewer.charAt(0)}
+                    </span>
+                    <div>
+                      <p className={css.reviewerName}>{review.reviewer}</p>
+                      <p className={css.reviewRating}>
+                        <svg
+                          className={css.reviewRatingIcon}
+                          width='16'
+                          height='16'
+                          aria-hidden='true'
+                        >
+                          <use href='/sprite.svg#icon-star' />
+                        </svg>
+                        {review.rating.toFixed(1)}
+                      </p>
+                    </div>
+                  </div>
+                  <p className={css.reviewComment}>{review.comment}</p>
+                </div>
+              ))}
+            </div>
             <button
               className={css.appointmentButton}
               type='button'
