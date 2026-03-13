@@ -15,6 +15,8 @@ function sortPsychologists(value: SortValue, source: Psychologist[]) {
   const data = [...source];
 
   switch (value) {
+    case 'show-all':
+      return data;
     case 'a-z':
       return data.sort((a, b) => a.name.localeCompare(b.name));
     case 'z-a':
