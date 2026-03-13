@@ -54,9 +54,24 @@
 }
 
 .metaText {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size-16);
-  line-height: var(--line-height-24);
+  line-height: 1.5;
+}
+
+.ratingIcon {
+  flex-shrink: 0;
+  color: var(--color-star);
+}
+
+.metaDivider {
+  width: 1px;
+  height: 20px;
+  background: rgba(25, 26, 21, 0.2);
 }
 
 .price {
@@ -65,18 +80,19 @@
 
 .favoriteButton,
 .favoriteButtonActive {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--color-border-primary);
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
   background: transparent;
   color: var(--color-text-primary);
-  font-size: 22px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .favoriteButtonActive {
-  border-color: var(--color-brand);
   color: var(--color-brand);
 }
 
@@ -85,9 +101,8 @@
 }
 
 .favoriteIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  color: currentColor;
 }
 
 .favoriteIconLoading {

@@ -69,7 +69,18 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
         </div>
 
         <div className={css.metaBlock}>
-          <p className={css.metaText}>Rating: {psychologist.rating.toFixed(2)}</p>
+          <p className={css.metaText}>
+            <svg
+              className={css.ratingIcon}
+              width='18'
+              height='18'
+              aria-hidden='true'
+            >
+              <use href='/sprite.svg#icon-star' />
+            </svg>
+            Rating: {psychologist.rating.toFixed(2)}
+          </p>
+          <span className={css.metaDivider} aria-hidden='true' />
           <p className={css.metaText}>
             Price / 1 hour: <span className={css.price}>{psychologist.price_per_hour}$</span>
           </p>
@@ -80,11 +91,20 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
             aria-busy={isFavoriteUpdating}
             onClick={onFavoriteClick}
           >
-            <span
+            <svg
               className={`${css.favoriteIcon} ${isFavoriteUpdating ? css.favoriteIconLoading : ''}`}
+              width='22'
+              height='22'
+              aria-hidden='true'
             >
-              ♥
-            </span>
+              <use
+                href={
+                  isFavorite
+                    ? '/sprite.svg#icon-heart-filled'
+                    : '/sprite.svg#icon-heart'
+                }
+              />
+            </svg>
           </button>
         </div>
       </div>
