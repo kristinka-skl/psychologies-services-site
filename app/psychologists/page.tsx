@@ -3,36 +3,13 @@
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import PsychologistCard from '@/app/components/PsychologistCard/PsychologistCard';
-import SortFilter, { SortValue } from '@/app/components/SortFilter/SortFilter';
+import SortFilter from '@/app/components/SortFilter/SortFilter';
 import { getPsychologists } from '@/app/lib/psychologistsApi';
-import { Psychologist } from '@/app/types/psychologist';
+import { sortPsychologists, SortValue } from '@/app/lib/sortPsychologists';
 import css from '@/app/psychologists/page.module.css';
 
 const INITIAL_ITEMS = 3;
 const STEP_ITEMS = 3;
-
-function sortPsychologists(value: SortValue, source: Psychologist[]) {
-  const data = [...source];
-
-  switch (value) {
-    case 'show-all':
-      return data;
-    case 'a-z':
-      return data.sort((a, b) => a.name.localeCompare(b.name));
-    case 'z-a':
-      return data.sort((a, b) => b.name.localeCompare(a.name));
-    case 'price-low':
-      return data.sort((a, b) => a.price_per_hour - b.price_per_hour);
-    case 'price-high':
-      return data.sort((a, b) => b.price_per_hour - a.price_per_hour);
-    case 'rating-low':
-      return data.sort((a, b) => a.rating - b.rating);
-    case 'rating-high':
-      return data.sort((a, b) => b.rating - a.rating);
-    default:
-      return data;
-  }
-}
 
 export default function PsychologistsPage() {
   const [sortValue, setSortValue] = useState<SortValue>('a-z');
