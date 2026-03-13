@@ -62,12 +62,14 @@
 
 .heroMedia {
   width: min(100%, 464px);
-  margin: 0 auto;
+  margin: 0 0 0 auto;
+  justify-self: end;
 }
 
 .heroImageWrap {
   position: relative;
   width: 100%;
+  overflow: visible;
 }
 
 .heroImage {
@@ -99,7 +101,7 @@
 .usersBadge {
   position: absolute;
   top: 12px;
-  right: -12px;
+  right: -10px;
   width: 40px;
   height: 40px;
   border-radius: var(--radius-13);
@@ -188,7 +190,8 @@
   }
 
   .heroMedia {
-    margin-left: auto;
+    margin: 0 0 0 auto;
+    justify-self: end;
   }
 
   .questionBadge {
@@ -200,7 +203,7 @@
 
   .usersBadge {
     top: 20px;
-    right: -22px;
+    right: -14px;
     width: 44px;
     height: 44px;
     border-radius: var(--radius-14);
@@ -226,7 +229,7 @@
 
 @media (min-width: 1440px) {
   .container {
-    width: min(100% - 256px, var(--container-max-width));
+    width: min(100% - 256px, var(--card-width-desktop));
     align-items: start;
   }
 
@@ -260,10 +263,10 @@
   }
 
   .usersBadge {
-    top: 54px;
-    right: -48px;
-    width: 59px;
-    height: 59px;
+    top: 38px;
+    right: -43px;
+    width: 52px;
+    height: 52px;
     border-radius: var(--radius-14);
     transform: rotate(14deg);
   }

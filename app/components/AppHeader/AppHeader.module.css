@@ -123,10 +123,43 @@
   color: var(--color-text-primary);
 }
 
+.secondaryButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-15);
+  background: var(--color-brand);
+  color: var(--color-white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar svg {
+  width: 18px;
+  height: 18px;
+  color: currentColor;
+  display: block;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  min-width: 90px;
+  min-height: 40px;
+}
+
 .userName {
   color: var(--color-text-primary);
   font-size: var(--font-size-16);
   line-height: var(--line-height-20);
+  font-weight: var(--font-weight-medium);
 }
 
 @media (min-width: 768px) {
@@ -167,6 +200,10 @@
     align-items: center;
   }
 
+  .desktopActionsAuthorized {
+    gap: 28px;
+  }
+
   .desktopActions .primaryButton,
   .desktopActions .secondaryButton {
     width: auto;
@@ -175,6 +212,11 @@
 
   .desktopActions .secondaryButton {
     min-width: 92px;
+  }
+
+  .desktopActionsAuthorized .secondaryButton {
+    min-width: 135px;
+    height: 48px;
   }
 
   .desktopActions .primaryButton {
@@ -188,7 +230,7 @@
 
 @media (min-width: 1440px) {
   .container {
-    width: min(100% - 256px, var(--container-max-width));
+    width: min(100% - 256px, var(--card-width-desktop));
     min-height: 96px;
   }
 
