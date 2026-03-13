@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useAuthStore } from '@/app/store/authStore';
 import { useUiStore } from '@/app/store/uiStore';
 import css from '@/app/components/AppHeader/AppHeader.module.css';
@@ -13,8 +14,21 @@ export default function AppHeader() {
   const signOut = useAuthStore((state) => state.signOut);
   const openAuthModal = useUiStore((state) => state.openAuthModal);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const closeDrawer = () => setIsDrawerOpen(false);
+
+  const handleSignOut = async () => {
+    setIsLoggingOut(true);
+    try {
+      await signOut();
+      toast.success('You have been logged out');
+    } catch {
+      toast.error('Failed to log out');
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   useEffect(() => {
     if (!isDrawerOpen) {
@@ -49,20 +63,32 @@ export default function AppHeader() {
           >
             Psychologists
           </Link>
-          <Link
-            className={pathname === '/favorites' ? css.active : ''}
-            href='/favorites'
-          >
-            Favorites
-          </Link>
+          {user ? (
+            <Link
+              className={pathname === '/favorites' ? css.active : ''}
+              href='/favorites'
+            >
+              Favorites
+            </Link>
+          ) : null}
         </nav>
 
         <div className={css.desktopActions}>
           {user ? (
             <>
+              <span className={css.avatar} aria-hidden='true'>
+                <svg width='16' height='16'>
+                  <use href='/sprite.svg#icon-user' />
+                </svg>
+              </span>
               <p className={css.userName}>{user.name}</p>
-              <button className={css.secondaryButton} type='button' onClick={signOut}>
-                Log out
+              <button
+                className={css.secondaryButton}
+                type='button'
+                disabled={isLoggingOut}
+                onClick={handleSignOut}
+              >
+                {isLoggingOut ? 'Logging out...' : 'Log out'}
               </button>
             </>
           ) : (
@@ -105,7 +131,7 @@ export default function AppHeader() {
             aria-label='Mobile menu'
           >
             <button className={css.drawerClose} type='button' onClick={closeDrawer}>
-              ×
+              \u00d7
             </button>
             <nav className={css.drawerNav}>
               <Link href='/' onClick={closeDrawer}>
@@ -114,23 +140,33 @@ export default function AppHeader() {
               <Link href='/psychologists' onClick={closeDrawer}>
                 Psychologists
               </Link>
-              <Link href='/favorites' onClick={closeDrawer}>
-                Favorites
-              </Link>
+              {user ? (
+                <Link href='/favorites' onClick={closeDrawer}>
+                  Favorites
+                </Link>
+              ) : null}
             </nav>
             <div className={css.drawerActions}>
               {user ? (
                 <>
-                  <p className={css.userName}>{user.name}</p>
+                  <div className={css.userInfo}>
+                    <span className={css.avatar} aria-hidden='true'>
+                      <svg width='16' height='16'>
+                        <use href='/sprite.svg#icon-user' />
+                      </svg>
+                    </span>
+                    <p className={css.userName}>{user.name}</p>
+                  </div>
                   <button
                     className={css.secondaryButton}
                     type='button'
-                    onClick={() => {
-                      signOut();
+                    disabled={isLoggingOut}
+                    onClick={async () => {
+                      await handleSignOut();
                       closeDrawer();
                     }}
                   >
-                    Log out
+                    {isLoggingOut ? 'Logging out...' : 'Log out'}
                   </button>
                 </>
               ) : (

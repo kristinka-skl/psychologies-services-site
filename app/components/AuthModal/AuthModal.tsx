@@ -36,18 +36,30 @@ export default function AuthModal() {
     defaultValues: { name: '', email: '', password: '' },
   });
 
-  const onLoginSubmit = (values: AuthLoginValues) => {
-    signIn({ email: values.email, name: values.email.split('@')[0] });
-    toast.success('You are logged in');
-    loginForm.reset();
-    closeAuthModal();
+  const onLoginSubmit = async (values: AuthLoginValues) => {
+    try {
+      await signIn(values.email, values.password);
+      toast.success('You are logged in');
+      loginForm.reset();
+      closeAuthModal();
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Login failed';
+      toast.error(message);
+    }
   };
 
-  const onRegisterSubmit = (values: AuthRegisterValues) => {
-    signUp({ name: values.name, email: values.email });
-    toast.success('Registration successful');
-    registerForm.reset();
-    closeAuthModal();
+  const onRegisterSubmit = async (values: AuthRegisterValues) => {
+    try {
+      await signUp(values.name, values.email, values.password);
+      toast.success('Registration successful');
+      registerForm.reset();
+      closeAuthModal();
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Registration failed';
+      toast.error(message);
+    }
   };
 
   return (
