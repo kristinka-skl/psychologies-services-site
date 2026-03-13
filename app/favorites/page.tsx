@@ -1,30 +1,50 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import SortFilter from '@/app/components/SortFilter/SortFilter';
 import { useAuthStore } from '@/app/store/authStore';
-import { getPsychologists } from '@/app/lib/psychologistsApi';
+import { getPsychologistsByIds } from '@/app/lib/psychologistsApi';
 import { sortPsychologists, SortValue } from '@/app/lib/sortPsychologists';
 import { useFavoritesStore } from '@/app/store/favoritesStore';
 import PsychologistCard from '@/app/components/PsychologistCard/PsychologistCard';
 import css from '@/app/favorites/page.module.css';
 
-const INITIAL_ITEMS = 3;
 const STEP_ITEMS = 3;
 
 export default function FavoritesPage() {
   const [sortValue, setSortValue] = useState<SortValue>('a-z');
-  const [visibleCount, setVisibleCount] = useState(INITIAL_ITEMS);
+  const [sortedCount, setSortedCount] = useState(STEP_ITEMS);
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const loading = useAuthStore((state) => state.loading);
   const favoriteIds = useFavoritesStore((state) => state.favoriteIds);
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['psychologists'],
-    queryFn: getPsychologists,
-    enabled: Boolean(user),
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['favorite-psychologists', favoriteIds],
+    queryFn: async ({ pageParam }) => {
+      const nextIds = favoriteIds.slice(pageParam, pageParam + STEP_ITEMS);
+      const items = await getPsychologistsByIds(nextIds);
+      const nextOffset = pageParam + nextIds.length;
+
+      return {
+        items,
+        nextOffset,
+        hasMore: nextOffset < favoriteIds.length,
+      };
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMore ? lastPage.nextOffset : undefined,
+    enabled: Boolean(user) && favoriteIds.length > 0,
   });
 
   useEffect(() => {
@@ -39,19 +59,28 @@ export default function FavoritesPage() {
     throw error;
   }
 
-  const favoritePsychologists = useMemo(
-    () => (data || []).filter((psychologist) => favoriteIds.includes(psychologist.id)),
-    [data, favoriteIds]
+  const loadedFavoritePsychologists = useMemo(
+    () => data?.pages.flatMap((page) => page.items) ?? [],
+    [data]
   );
-  const sortedFavoritePsychologists = useMemo(
-    () => sortPsychologists(sortValue, favoritePsychologists),
-    [favoritePsychologists, sortValue]
-  );
-  const visibleFavoritePsychologists = sortedFavoritePsychologists.slice(
-    0,
-    visibleCount
-  );
-  const hasMore = visibleCount < sortedFavoritePsychologists.length;
+  const visibleFavoritePsychologists = useMemo(() => {
+    const normalizedSortedCount = Math.min(
+      sortedCount,
+      loadedFavoritePsychologists.length
+    );
+    const sortedPart = sortPsychologists(
+      sortValue,
+      loadedFavoritePsychologists.slice(0, normalizedSortedCount)
+    );
+    const appendedPart = loadedFavoritePsychologists.slice(normalizedSortedCount);
+
+    return [...sortedPart, ...appendedPart];
+  }, [loadedFavoritePsychologists, sortedCount, sortValue]);
+
+  function handleSortChange(nextSortValue: SortValue) {
+    setSortValue(nextSortValue);
+    setSortedCount(loadedFavoritePsychologists.length);
+  }
 
   if (loading || isLoading) {
     return (
@@ -72,9 +101,9 @@ export default function FavoritesPage() {
     <main className={css.page}>
       <section className={css.container}>
         <h1 className={css.visuallyHidden}>Favorites</h1>
-        <SortFilter value={sortValue} onChange={setSortValue} />
+        <SortFilter value={sortValue} onChange={handleSortChange} />
 
-        {sortedFavoritePsychologists.length ? (
+        {visibleFavoritePsychologists.length ? (
           <div className={css.cards}>
             {visibleFavoritePsychologists.map((psychologist) => (
               <PsychologistCard key={psychologist.id} psychologist={psychologist} />
@@ -86,13 +115,14 @@ export default function FavoritesPage() {
           </p>
         )}
 
-        {hasMore ? (
+        {hasNextPage ? (
           <button
             className={css.loadMoreButton}
             type='button'
-            onClick={() => setVisibleCount((count) => count + STEP_ITEMS)}
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
           >
-            Load more
+            {isFetchingNextPage ? 'Loading...' : 'Load more'}
           </button>
         ) : null}
       </section>

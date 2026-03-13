@@ -1,5 +1,6 @@
-import { get, ref, remove, set } from 'firebase/database';
-import { db } from '@/app/lib/firebaseClient';
+import { auth } from '@/app/lib/firebaseClient';
+import { requestJson } from '@/app/lib/firebaseRest';
+import { mapLegacyIdsToDatabaseKeys } from '@/app/lib/psychologistsApi';
 
 type FavoritesMap = Record<string, boolean>;
 
@@ -15,38 +16,99 @@ function decodeFavoriteId(encodedId: string): string {
   }
 }
 
-function getUserFavoritesRef(uid: string) {
-  return ref(db, `users/${uid}/favorites`);
+function getUserFavoritesPath(uid: string): string {
+  return `users/${uid}/favorites`;
 }
 
-function getUserFavoriteItemRef(uid: string, psychologistId: string) {
-  return ref(db, `users/${uid}/favorites/${encodeFavoriteId(psychologistId)}`);
+function getUserFavoriteItemPath(uid: string, psychologistId: string): string {
+  return `${getUserFavoritesPath(uid)}/${encodeFavoriteId(psychologistId)}`;
+}
+
+function isLegacyFavoriteId(id: string): boolean {
+  return /[a-z]/i.test(id) && id.includes('-');
+}
+
+async function getAuthToken(): Promise<string> {
+  const currentUser = auth.currentUser;
+
+  if (!currentUser) {
+    throw new Error('User is not authenticated');
+  }
+
+  return currentUser.getIdToken();
 }
 
 export async function getUserFavoriteIds(uid: string): Promise<string[]> {
-  const snapshot = await get(getUserFavoritesRef(uid));
+  const authToken = await getAuthToken();
+  const favorites = await requestJson<FavoritesMap | null>(
+    getUserFavoritesPath(uid),
+    { authToken }
+  );
 
-  if (!snapshot.exists()) {
+  if (!favorites) {
     return [];
   }
 
-  const favorites = snapshot.val() as FavoritesMap;
-
-  return Object.keys(favorites)
+  const favoriteIds = Object.keys(favorites)
     .filter((favoriteId) => Boolean(favorites[favoriteId]))
     .map((favoriteId) => decodeFavoriteId(favoriteId));
+  const normalizedIds = favoriteIds.some(isLegacyFavoriteId)
+    ? await mapLegacyIdsToDatabaseKeys(favoriteIds)
+    : favoriteIds;
+  const hasChanges =
+    normalizedIds.length !== favoriteIds.length ||
+    normalizedIds.some((id, index) => id !== favoriteIds[index]);
+
+  if (hasChanges) {
+    const normalizedFavorites = Object.fromEntries(
+      normalizedIds.map((id) => [encodeFavoriteId(id), true])
+    );
+
+    await requestJson<Record<string, boolean>>(
+      getUserFavoritesPath(uid),
+      normalizedIds.length
+        ? {
+            method: 'PUT',
+            authToken,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(normalizedFavorites),
+          }
+        : {
+            method: 'DELETE',
+            authToken,
+          }
+    );
+  }
+
+  return normalizedIds;
 }
 
 export async function addUserFavorite(
   uid: string,
   psychologistId: string
 ): Promise<void> {
-  await set(getUserFavoriteItemRef(uid, psychologistId), true);
+  const authToken = await getAuthToken();
+
+  await requestJson<true>(getUserFavoriteItemPath(uid, psychologistId), {
+    method: 'PUT',
+    authToken,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(true),
+  });
 }
 
 export async function removeUserFavorite(
   uid: string,
   psychologistId: string
 ): Promise<void> {
-  await remove(getUserFavoriteItemRef(uid, psychologistId));
+  const authToken = await getAuthToken();
+
+  await requestJson<null>(getUserFavoriteItemPath(uid, psychologistId), {
+    method: 'DELETE',
+    authToken,
+  });
 }

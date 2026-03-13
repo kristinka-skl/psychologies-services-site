@@ -1,40 +1,63 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import PsychologistCard from '@/app/components/PsychologistCard/PsychologistCard';
 import SortFilter from '@/app/components/SortFilter/SortFilter';
-import { getPsychologists } from '@/app/lib/psychologistsApi';
+import { getPsychologistsPage } from '@/app/lib/psychologistsApi';
 import { sortPsychologists, SortValue } from '@/app/lib/sortPsychologists';
 import css from '@/app/psychologists/page.module.css';
 
-const INITIAL_ITEMS = 3;
 const STEP_ITEMS = 3;
 
 export default function PsychologistsPage() {
   const [sortValue, setSortValue] = useState<SortValue>('a-z');
-  const [visibleCount, setVisibleCount] = useState(INITIAL_ITEMS);
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['psychologists'],
-    queryFn: getPsychologists,
+  const [sortedCount, setSortedCount] = useState(STEP_ITEMS);
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['psychologists', 'infinite'],
+    queryFn: ({ pageParam }) =>
+      getPsychologistsPage({ cursor: pageParam, limit: STEP_ITEMS }),
+    initialPageParam: null as string | null,
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMore ? lastPage.nextCursor : undefined,
   });
 
   if (isError) {
     throw error;
   }
 
-  const sortedPsychologists = useMemo(
-    () => sortPsychologists(sortValue, data || []),
-    [data, sortValue]
+  const loadedPsychologists = useMemo(
+    () => data?.pages.flatMap((page) => page.items) ?? [],
+    [data]
   );
+  const visiblePsychologists = useMemo(() => {
+    const normalizedSortedCount = Math.min(sortedCount, loadedPsychologists.length);
+    const sortedPart = sortPsychologists(
+      sortValue,
+      loadedPsychologists.slice(0, normalizedSortedCount)
+    );
+    const appendedPart = loadedPsychologists.slice(normalizedSortedCount);
 
-  const visiblePsychologists = sortedPsychologists.slice(0, visibleCount);
-  const hasMore = visibleCount < sortedPsychologists.length;
+    return [...sortedPart, ...appendedPart];
+  }, [loadedPsychologists, sortedCount, sortValue]);
+
+  function handleSortChange(nextSortValue: SortValue) {
+    setSortValue(nextSortValue);
+    setSortedCount(loadedPsychologists.length);
+  }
 
   return (
     <main className={css.page}>
       <section className={css.container}>
-        <SortFilter value={sortValue} onChange={setSortValue} />
+        <SortFilter value={sortValue} onChange={handleSortChange} />
 
         {isLoading ? (
           <p>Loading psychologists...</p>
@@ -46,13 +69,14 @@ export default function PsychologistsPage() {
           </div>
         )}
 
-        {!isLoading && hasMore ? (
+        {!isLoading && hasNextPage ? (
           <button
             className={css.loadMoreButton}
             type='button'
-            onClick={() => setVisibleCount((count) => count + STEP_ITEMS)}
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
           >
-            Load more
+            {isFetchingNextPage ? 'Loading...' : 'Load more'}
           </button>
         ) : null}
       </section>
