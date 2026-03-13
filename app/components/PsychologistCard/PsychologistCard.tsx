@@ -19,19 +19,33 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
   const isFavorite = useFavoritesStore((state) =>
     state.isFavorite(psychologist.id)
   );
-  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
+  const toggleFavoriteForUser = useFavoritesStore(
+    (state) => state.toggleFavoriteForUser
+  );
   const openAuthModal = useUiStore((state) => state.openAuthModal);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
+  const [isFavoriteUpdating, setIsFavoriteUpdating] = useState(false);
 
-  const onFavoriteClick = () => {
+  const onFavoriteClick = async () => {
+    if (isFavoriteUpdating) {
+      return;
+    }
+
     if (!user) {
       toast.error('Favorites are available only for authorized users');
       openAuthModal('login');
       return;
     }
 
-    toggleFavorite(psychologist.id);
+    setIsFavoriteUpdating(true);
+    try {
+      await toggleFavoriteForUser(user.uid, psychologist.id);
+    } catch {
+      toast.error('Failed to update favorites. Please try again.');
+    } finally {
+      setIsFavoriteUpdating(false);
+    }
   };
 
   return (
@@ -60,12 +74,17 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
             Price / 1 hour: <span className={css.price}>{psychologist.price_per_hour}$</span>
           </p>
           <button
-            className={isFavorite ? css.favoriteButtonActive : css.favoriteButton}
+            className={`${isFavorite ? css.favoriteButtonActive : css.favoriteButton} ${isFavoriteUpdating ? css.favoriteButtonLoading : ''}`}
             type='button'
-            aria-label='Add to favorites'
+            aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            aria-busy={isFavoriteUpdating}
             onClick={onFavoriteClick}
           >
-            ♥
+            <span
+              className={`${css.favoriteIcon} ${isFavoriteUpdating ? css.favoriteIconLoading : ''}`}
+            >
+              ♥
+            </span>
           </button>
         </div>
       </div>

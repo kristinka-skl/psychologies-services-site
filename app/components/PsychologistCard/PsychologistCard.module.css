@@ -80,6 +80,34 @@
   color: var(--color-brand);
 }
 
+.favoriteButtonLoading {
+  opacity: 0.8;
+}
+
+.favoriteIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favoriteIconLoading {
+  animation: favoritePulse 0.8s ease-in-out infinite;
+}
+
+@keyframes favoritePulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.82);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
 .chips {
   display: flex;
   flex-wrap: wrap;
