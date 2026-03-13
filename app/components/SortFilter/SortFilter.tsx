@@ -2,15 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import css from '@/app/components/SortFilter/SortFilter.module.css';
-
-export type SortValue =
-  | 'show-all'
-  | 'a-z'
-  | 'z-a'
-  | 'price-low'
-  | 'price-high'
-  | 'rating-low'
-  | 'rating-high';
+import { SortValue } from '@/app/lib/sortPsychologists';
 
 interface SortFilterProps {
   value: SortValue;
