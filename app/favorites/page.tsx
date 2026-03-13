@@ -79,7 +79,7 @@ export default function FavoritesPage() {
 
   function handleSortChange(nextSortValue: SortValue) {
     setSortValue(nextSortValue);
-    setSortedCount(loadedFavoritePsychologists.length);
+    setSortedCount(Math.max(loadedFavoritePsychologists.length, STEP_ITEMS));
   }
 
   if (loading || isLoading) {

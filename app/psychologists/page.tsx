@@ -51,7 +51,7 @@ export default function PsychologistsPage() {
 
   function handleSortChange(nextSortValue: SortValue) {
     setSortValue(nextSortValue);
-    setSortedCount(loadedPsychologists.length);
+    setSortedCount(Math.max(loadedPsychologists.length, STEP_ITEMS));
   }
 
   return (

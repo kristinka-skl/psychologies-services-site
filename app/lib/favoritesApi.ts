@@ -25,7 +25,7 @@ function getUserFavoriteItemPath(uid: string, psychologistId: string): string {
 }
 
 function isLegacyFavoriteId(id: string): boolean {
-  return /[a-z]/i.test(id) && id.includes('-');
+  return /^[a-z0-9]+(?:-[a-z0-9]+)+$/.test(id);
 }
 
 async function getAuthToken(): Promise<string> {
@@ -64,22 +64,26 @@ export async function getUserFavoriteIds(uid: string): Promise<string[]> {
       normalizedIds.map((id) => [encodeFavoriteId(id), true])
     );
 
-    await requestJson<Record<string, boolean>>(
-      getUserFavoritesPath(uid),
-      normalizedIds.length
-        ? {
-            method: 'PUT',
-            authToken,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(normalizedFavorites),
-          }
-        : {
-            method: 'DELETE',
-            authToken,
-          }
-    );
+    try {
+      await requestJson<Record<string, boolean>>(
+        getUserFavoritesPath(uid),
+        normalizedIds.length
+          ? {
+              method: 'PUT',
+              authToken,
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(normalizedFavorites),
+            }
+          : {
+              method: 'DELETE',
+              authToken,
+            }
+      );
+    } catch {
+      // Non-blocking migration: keep resolved IDs in UI even if sync-write fails.
+    }
   }
 
   return normalizedIds;

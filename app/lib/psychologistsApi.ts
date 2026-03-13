@@ -27,28 +27,25 @@ function createIdFromName(name: string, fallbackKey: string): string {
 
 function normalizeResponseEntries(
   value: PsychologistsResponse
-): { entries: Array<[string, PsychologistWithoutId]>; isArray: boolean } {
+): Array<[string, PsychologistWithoutId]> {
   if (!value) {
-    return { entries: [], isArray: false };
+    return [];
   }
 
   if (Array.isArray(value)) {
-    return {
-      entries: value
-        .map(
-          (psychologist, index): [string, PsychologistWithoutId | undefined] => [
-            String(index),
-            psychologist,
-          ]
-        )
-        .filter(
-          (entry): entry is [string, PsychologistWithoutId] => Boolean(entry[1])
-        ),
-      isArray: true,
-    };
+    return value
+      .map(
+        (psychologist, index): [string, PsychologistWithoutId | undefined] => [
+          String(index),
+          psychologist,
+        ]
+      )
+      .filter(
+        (entry): entry is [string, PsychologistWithoutId] => Boolean(entry[1])
+      );
   }
 
-  return { entries: Object.entries(value), isArray: false };
+  return Object.entries(value);
 }
 
 function normalizeEntriesData(
@@ -72,7 +69,7 @@ export async function getPsychologistsPage({
       startAt: cursor ? JSON.stringify(cursor) : undefined,
     },
   });
-  const { entries } = normalizeResponseEntries(value);
+  const entries = normalizeResponseEntries(value);
   const entriesWithoutCursor =
     cursor && entries[0]?.[0] === cursor ? entries.slice(1) : entries;
   const pageEntries = entriesWithoutCursor.slice(0, limit);
