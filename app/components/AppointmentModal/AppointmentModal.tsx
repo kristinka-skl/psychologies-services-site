@@ -1,21 +1,27 @@
 'use client';
 
+import { useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import Image from 'next/image';
+import { useForm, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Modal from '@/app/components/Modal/Modal';
+import AppointmentTimePicker from '@/app/components/AppointmentTimePicker/AppointmentTimePicker';
+import { APPOINTMENT_TIME_OPTIONS } from '@/app/lib/appointmentTimeOptions';
 import { appointmentSchema, AppointmentValues } from '@/app/lib/validation';
 import css from '@/app/components/AppointmentModal/AppointmentModal.module.css';
 
 interface AppointmentModalProps {
   isOpen: boolean;
   psychologistName: string;
+  psychologistAvatarUrl: string;
   onClose: () => void;
 }
 
 export default function AppointmentModal({
   isOpen,
   psychologistName,
+  psychologistAvatarUrl,
   onClose,
 }: AppointmentModalProps) {
   const form = useForm<AppointmentValues>({
@@ -26,13 +32,28 @@ export default function AppointmentModal({
       phone: '',
       email: '',
       time: '',
-      notes: '',
+      comment: '',
     },
   });
 
-  const onSubmit = (values: AppointmentValues) => {
+  const selectedTime = useWatch({
+    control: form.control,
+    name: 'time',
+  });
+  const errors = form.formState.errors;
+  const shouldShowErrors = form.formState.submitCount > 0;
+
+  useEffect(() => {
+    if (isOpen) {
+      return;
+    }
+
+    form.reset();
+  }, [isOpen, form]);
+
+  const onSubmit = () => {
     toast.success(`Request sent to ${psychologistName}`);
-    form.reset(values);
+    form.reset();
     onClose();
   };
 
@@ -40,41 +61,109 @@ export default function AppointmentModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={`Make an appointment with ${psychologistName}`}
+      title={`Make an appointment with a psychologists`}
+      size='appointment'
     >
+      <p className={css.description}>
+        You are on the verge of changing your life for the better. Fill out the
+        short form below to book your personal appointment with a professional
+        psychologist. We guarantee confidentiality and respect for your privacy.
+      </p>
+
+      <div className={css.psychologistBlock}>
+        <Image
+          className={css.psychologistAvatar}
+          src={psychologistAvatarUrl}
+          alt={`${psychologistName} profile photo`}
+          width={44}
+          height={44}
+          unoptimized
+        />
+        <div>
+          <p className={css.psychologistLabel}>Your psychologist</p>
+          <p className={css.psychologistName}>{psychologistName}</p>
+        </div>
+      </div>
+
       <form className={css.form} onSubmit={form.handleSubmit(onSubmit)}>
         <label className={css.field}>
-          Name
-          <input className={css.input} type='text' {...form.register('name')} />
-          <span className={css.error}>{form.formState.errors.name?.message}</span>
+          <span className={css.visuallyHidden}>Name</span>
+          <input
+            className={`${css.input} ${shouldShowErrors && errors.name ? css.inputError : ''}`}
+            aria-invalid={shouldShowErrors && Boolean(errors.name)}
+            type='text'
+            placeholder='Name'
+            {...form.register('name')}
+          />
+          <span className={css.error}>
+            {shouldShowErrors ? errors.name?.message : ''}
+          </span>
         </label>
 
         <label className={css.field}>
-          Phone
-          <input className={css.input} type='tel' {...form.register('phone')} />
-          <span className={css.error}>{form.formState.errors.phone?.message}</span>
+          <span className={css.visuallyHidden}>Email</span>
+          <input
+            className={`${css.input} ${shouldShowErrors && errors.email ? css.inputError : ''}`}
+            aria-invalid={shouldShowErrors && Boolean(errors.email)}
+            type='email'
+            placeholder='Email'
+            {...form.register('email')}
+          />
+          <span className={css.error}>
+            {shouldShowErrors ? errors.email?.message : ''}
+          </span>
         </label>
 
-        <label className={css.field}>
-          Email
-          <input className={css.input} type='email' {...form.register('email')} />
-          <span className={css.error}>{form.formState.errors.email?.message}</span>
-        </label>
+        <div className={css.row}>
+          <label className={css.field}>
+            <span className={css.visuallyHidden}>Phone</span>
+            <input
+              className={`${css.input} ${shouldShowErrors && errors.phone ? css.inputError : ''}`}
+              aria-invalid={shouldShowErrors && Boolean(errors.phone)}
+              type='tel'
+              placeholder='+380'
+              {...form.register('phone')}
+            />
+            <span className={css.error}>
+              {shouldShowErrors ? errors.phone?.message : ''}
+            </span>
+          </label>
+
+          <div className={`${css.field} ${css.timeField}`}>
+            <span className={css.visuallyHidden}>Meeting time</span>
+            <AppointmentTimePicker
+              value={selectedTime}
+              options={APPOINTMENT_TIME_OPTIONS}
+              error={shouldShowErrors ? errors.time?.message : ''}
+              hasError={shouldShowErrors && Boolean(errors.time)}
+              onSelect={(time) => {
+                form.setValue('time', time, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                  shouldTouch: true,
+                });
+              }}
+            />
+            <input type='hidden' {...form.register('time')} />
+          </div>
+        </div>
 
         <label className={css.field}>
-          Preferred time
-          <input className={css.input} type='text' {...form.register('time')} />
-          <span className={css.error}>{form.formState.errors.time?.message}</span>
-        </label>
-
-        <label className={css.field}>
-          Message
-          <textarea className={css.textarea} rows={4} {...form.register('notes')} />
-          <span className={css.error}>{form.formState.errors.notes?.message}</span>
+          <span className={css.visuallyHidden}>Comment</span>
+          <textarea
+            className={`${css.textarea} ${shouldShowErrors && errors.comment ? css.inputError : ''}`}
+            aria-invalid={shouldShowErrors && Boolean(errors.comment)}
+            rows={4}
+            placeholder='Comment'
+            {...form.register('comment')}
+          />
+          <span className={css.error}>
+            {shouldShowErrors ? errors.comment?.message : ''}
+          </span>
         </label>
 
         <button className={css.submitButton} type='submit'>
-          Send request
+          Send
         </button>
       </form>
     </Modal>

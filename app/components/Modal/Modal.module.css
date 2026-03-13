@@ -20,6 +20,11 @@
   position: relative;
 }
 
+.modalAppointment {
+  max-height: calc(100dvh - var(--space-8));
+  padding: var(--space-20);
+}
+
 .closeButton {
   position: absolute;
   top: var(--space-12);
@@ -38,12 +43,40 @@
   margin-bottom: var(--space-16);
   padding-right: 44px;
   color: var(--color-text-primary);
-  font-size: var(--font-size-24);
-  line-height: var(--line-height-24);
+  font-weight: var(--font-weight-medium);
+  font-size: 40px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 @media (min-width: 768px) {
   .modal {
     padding: var(--space-32);
+  }
+}
+
+@media (min-width: 1440px) {
+  .modal {
+    padding: 64px;
+  }
+}
+
+@media (min-width: 768px) {
+  .modalAppointment {
+    max-width: 599px;
+    border-radius: var(--radius-30);
+    padding: var(--space-48);
+  }
+}
+
+@media (min-width: 1440px) {
+  .modalAppointment {
+    width: 599px;
+    height: 859px;
+    max-width: 599px;
+    max-height: calc(100dvh - var(--space-32));
+    overflow-y: hidden;
+    border-radius: var(--radius-30);
+    padding: 64px;
   }
 }

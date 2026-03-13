@@ -1,0 +1,135 @@
+.wrapper {
+  position: relative;
+}
+
+.button {
+  width: 100%;
+  height: 48px;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-14);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-16);
+  font-family: var(--font-family-base);
+  line-height: var(--line-height-20);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  padding: 0 var(--space-16);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.button.buttonError {
+  border-color: #d64045;
+  box-shadow: 0 0 0 1px #d64045;
+}
+
+.button:focus {
+  outline: none;
+  border-color: var(--color-brand);
+}
+
+.button.buttonError:focus {
+  border-color: #d64045;
+}
+
+.option:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+.icon {
+  color: var(--color-text-primary);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% - 8px);
+  right: 0;
+  width: 151px;
+  border-radius: var(--radius-20);
+  background: var(--color-bg-surface);
+  box-shadow: var(--shadow-dropdown);
+  padding: var(--space-16);
+  z-index: 2;
+}
+
+.dropdownTitle {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-20);
+  margin-bottom: var(--space-10);
+}
+
+.list {
+  list-style: none;
+  display: grid;
+  gap: var(--space-8);
+  max-height: 104px;
+  overflow-y: auto;
+  padding-right: var(--space-4);
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(25, 26, 21, 0.2) transparent;
+}
+
+.list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background: rgba(25, 26, 21, 0.16);
+  border-radius: var(--radius-pill);
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+  background: rgba(25, 26, 21, 0.24);
+}
+
+.option {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted-30);
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-20);
+  text-align: center;
+  cursor: pointer;
+}
+
+.option:hover {
+  color: var(--color-text-muted-50);
+}
+
+.optionActive {
+  color: var(--color-text-primary);
+}
+
+.error {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  color: #d64045;
+  font-size: 11px;
+  line-height: 1.1;
+}
+
+.error:empty {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .button {
+    height: 52px;
+  }
+}
