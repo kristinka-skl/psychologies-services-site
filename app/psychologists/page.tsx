@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import PsychologistCard from '@/app/components/PsychologistCard/PsychologistCard';
 import SortFilter from '@/app/components/SortFilter/SortFilter';
+import Loader from '@/app/components/Loader/Loader';
 import { getPsychologistsPage } from '@/app/lib/psychologistsApi';
 import { sortPsychologists, SortValue } from '@/app/lib/sortPsychologists';
 import css from '@/app/psychologists/page.module.css';
@@ -60,7 +61,7 @@ export default function PsychologistsPage() {
         <SortFilter value={sortValue} onChange={handleSortChange} />
 
         {isLoading ? (
-          <p>Loading psychologists...</p>
+          <Loader label='Loading psychologists' />
         ) : (
           <div className={css.cards}>
             {visiblePsychologists.map((psychologist) => (
