@@ -1,43 +1,55 @@
 'use client';
 
-import { useMemo } from 'react';
-import Link from 'next/link';
+import { useEffect, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/app/store/authStore';
+import { getPsychologists } from '@/app/lib/psychologistsApi';
 import { useFavoritesStore } from '@/app/store/favoritesStore';
-import { psychologists } from '@/app/constants/psychologists';
 import PsychologistCard from '@/app/components/PsychologistCard/PsychologistCard';
 import css from '@/app/favorites/page.module.css';
 
 export default function FavoritesPage() {
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
+  const loading = useAuthStore((state) => state.loading);
   const favoriteIds = useFavoritesStore((state) => state.favoriteIds);
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['psychologists'],
+    queryFn: getPsychologists,
+    enabled: Boolean(user),
+  });
+
+  useEffect(() => {
+    if (loading || user) {
+      return;
+    }
+
+    router.replace('/');
+  }, [loading, user, router]);
+
+  if (isError) {
+    throw error;
+  }
 
   const favoritePsychologists = useMemo(
-    () => psychologists.filter((psychologist) => favoriteIds.includes(psychologist.id)),
-    [favoriteIds]
+    () => (data || []).filter((psychologist) => favoriteIds.includes(psychologist.id)),
+    [data, favoriteIds]
   );
 
-  if (!user) {
+  if (loading || isLoading) {
     return (
       <main className={css.page}>
         <section className={css.container}>
           <h1 className={css.title}>Favorites</h1>
-          <p className={css.emptyText}>
-            This page is available only for authorized users.
-          </p>
-          <div className={css.actions}>
-            <button className={css.primaryButton} type='button' onClick={() => router.push('/')}>
-              Go to Home
-            </button>
-            <Link className={css.secondaryLink} href='/psychologists'>
-              Open Psychologists
-            </Link>
-          </div>
+          <p className={css.emptyText}>Loading favorites...</p>
         </section>
       </main>
     );
+  }
+
+  if (!user) {
+    return null;
   }
 
   return (
