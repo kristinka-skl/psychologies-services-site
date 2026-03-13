@@ -19,12 +19,30 @@
   background: var(--color-bg-surface);
   color: var(--color-text-primary);
   font-size: var(--font-size-16);
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-brand);
+}
+
+.input.inputError {
+  border-color: #d64045;
+  box-shadow: 0 0 0 1px #d64045;
+}
+
+.input.inputError:focus {
+  border-color: #d64045;
 }
 
 .error {
+  display: block;
   min-height: 18px;
+  line-height: var(--line-height-18);
   color: #d64045;
   font-size: var(--font-size-14);
+  font-weight: var(--font-weight-medium);
 }
 
 .submitButton {
