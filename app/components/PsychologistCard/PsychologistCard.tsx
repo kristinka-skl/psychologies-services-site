@@ -120,6 +120,7 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
           <button
             className={css.appointmentButton}
             type='button'
+            aria-label={`Make an appointment with ${psychologist.name}`}
             onClick={() => setIsAppointmentOpen(true)}
           >
             Make an appointment
@@ -138,6 +139,7 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
       <AppointmentModal
         isOpen={isAppointmentOpen}
         psychologistName={psychologist.name}
+        psychologistAvatarUrl={psychologist.avatar_url}
         onClose={() => setIsAppointmentOpen(false)}
       />
     </article>

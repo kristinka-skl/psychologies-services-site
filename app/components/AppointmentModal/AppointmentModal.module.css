@@ -1,13 +1,60 @@
+.description {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-20);
+  color: var(--color-text-muted-50);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-16);
+  line-height: 1.25;
+}
+
+.psychologistBlock {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+  margin-bottom: var(--space-20);
+}
+
+.psychologistAvatar {
+  border-radius: var(--radius-15);
+  object-fit: cover;
+  width: 40px;
+  height: 40px;
+}
+
+.psychologistLabel {
+  color: var(--color-text-muted-50);
+  font-size: 12px;
+  line-height: var(--line-height-18);
+  margin-bottom: var(--space-4);
+}
+
+.psychologistName {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-20);
+}
+
 .form {
   display: grid;
   gap: var(--space-16);
 }
 
 .field {
-  display: grid;
-  gap: var(--space-8);
-  color: var(--color-text-primary);
-  font-size: var(--font-size-14);
+  display: block;
+  position: relative;
+  width: 100%;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
 }
 
 .input,
@@ -19,27 +66,72 @@
   color: var(--color-text-primary);
   font-size: var(--font-size-16);
   font-family: var(--font-family-base);
-  padding: 0 var(--space-16);
+  line-height: var(--line-height-20);
+  transition: border-color 0.2s;
 }
 
 .input {
   height: 48px;
+  padding: 0 var(--space-16);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--color-text-primary);
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-brand);
+}
+
+.input.inputError,
+.textarea.inputError {
+  border-color: #d64045;
+  box-shadow: 0 0 0 1px #d64045;
+}
+
+.input.inputError:focus,
+.textarea.inputError:focus {
+  border-color: #d64045;
 }
 
 .textarea {
-  resize: vertical;
-  min-height: 120px;
-  padding-top: var(--space-12);
-  padding-bottom: var(--space-12);
+  min-height: 88px;
+  resize: none;
+  padding: var(--space-16);
+}
+
+.row {
+  display: grid;
+  gap: var(--space-16);
+}
+
+.timeField {
+  position: relative;
+}
+
+.submitButton:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
 }
 
 .error {
-  min-height: 18px;
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
   color: #d64045;
-  font-size: var(--font-size-14);
+  font-size: 11px;
+  line-height: 1.1;
+}
+
+.error:empty {
+  display: none;
 }
 
 .submitButton {
+  margin-top: 40px;
   height: 48px;
   border: 0;
   border-radius: var(--radius-30);
@@ -47,5 +139,31 @@
   color: var(--color-bg-surface);
   font-size: var(--font-size-16);
   font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-20);
   cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .psychologistAvatar {
+    width: 44px;
+    height: 44px;
+  }
+
+  .input {
+    height: 52px;
+  }
+
+  .textarea {
+    min-height: 116px;
+  }
+
+  .submitButton {
+    margin-top: 40px;
+    height: 52px;
+  }
+
+  .row {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+  }
 }

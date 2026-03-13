@@ -9,6 +9,7 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: ReactNode;
+  size?: 'default' | 'appointment';
 }
 
 export default function Modal({
@@ -16,6 +17,7 @@ export default function Modal({
   onClose,
   title,
   children,
+  size = 'default',
 }: ModalProps) {
   useEffect(() => {
     if (!isOpen) {
@@ -48,7 +50,7 @@ export default function Modal({
       role='presentation'
     >
       <section
-        className={css.modal}
+        className={`${css.modal} ${size === 'appointment' ? css.modalAppointment : ''}`}
         role='dialog'
         aria-modal='true'
         aria-label={title}
