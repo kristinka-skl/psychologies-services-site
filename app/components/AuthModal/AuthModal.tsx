@@ -20,7 +20,6 @@ export default function AuthModal() {
   const authModalMode = useUiStore((state) => state.authModalMode);
   const isAuthModalOpen = useUiStore((state) => state.isAuthModalOpen);
   const closeAuthModal = useUiStore((state) => state.closeAuthModal);
-  const openAuthModal = useUiStore((state) => state.openAuthModal);
   const signIn = useAuthStore((state) => state.signIn);
   const signUp = useAuthStore((state) => state.signUp);
 
@@ -49,6 +48,9 @@ export default function AuthModal() {
   const hasRegisterNameError = Boolean(registerErrors.name?.message);
   const hasRegisterEmailError = Boolean(registerErrors.email?.message);
   const hasRegisterPasswordError = Boolean(registerErrors.password?.message);
+  const descriptionText = isRegister
+    ? 'Thank you for your interest in our platform! In order to register, we need some information. Please provide us with the following information.'
+    : 'Welcome back! Please enter your credentials to access your account and continue your search for a psychologist.';
 
   const onLoginSubmit = async (values: AuthLoginValues) => {
     try {
@@ -111,6 +113,8 @@ export default function AuthModal() {
       onClose={closeAuthModal}
       title={isRegister ? 'Create account' : 'Log in'}
     >
+      <p className={css.description}>{descriptionText}</p>
+
       {isRegister ? (
         <form
           key='register-form'
@@ -122,13 +126,13 @@ export default function AuthModal() {
           )}
         >
           <label className={css.field}>
-            Name
+            <span className={css.visuallyHidden}>Name</span>
             <input
               className={`${css.input} ${hasRegisterNameError ? css.inputError : ''}`}
               aria-invalid={hasRegisterNameError}
               aria-describedby='register-name-error'
               type='text'
-              placeholder='Enter your name'
+              placeholder='Name'
               {...registerForm.register('name')}
             />
             <span id='register-name-error' className={css.error} role='alert'>
@@ -137,13 +141,13 @@ export default function AuthModal() {
           </label>
 
           <label className={css.field}>
-            Email
+            <span className={css.visuallyHidden}>Email</span>
             <input
               className={`${css.input} ${hasRegisterEmailError ? css.inputError : ''}`}
               aria-invalid={hasRegisterEmailError}
               aria-describedby='register-email-error'
               type='email'
-              placeholder='Enter your email'
+              placeholder='Email'
               {...registerForm.register('email')}
             />
             <span id='register-email-error' className={css.error} role='alert'>
@@ -152,13 +156,13 @@ export default function AuthModal() {
           </label>
 
           <label className={css.field}>
-            Password
+            <span className={css.visuallyHidden}>Password</span>
             <input
               className={`${css.input} ${hasRegisterPasswordError ? css.inputError : ''}`}
               aria-invalid={hasRegisterPasswordError}
               aria-describedby='register-password-error'
               type='password'
-              placeholder='Enter your password'
+              placeholder='Password'
               {...registerForm.register('password')}
             />
             <span id='register-password-error' className={css.error} role='alert'>
@@ -178,13 +182,13 @@ export default function AuthModal() {
           onSubmit={loginForm.handleSubmit(onLoginSubmit, onInvalidLoginSubmit)}
         >
           <label className={css.field}>
-            Email
+            <span className={css.visuallyHidden}>Email</span>
             <input
               className={`${css.input} ${hasLoginEmailError ? css.inputError : ''}`}
               aria-invalid={hasLoginEmailError}
               aria-describedby='login-email-error'
               type='email'
-              placeholder='Enter your email'
+              placeholder='Email'
               {...loginForm.register('email')}
             />
             <span id='login-email-error' className={css.error} role='alert'>
@@ -193,13 +197,13 @@ export default function AuthModal() {
           </label>
 
           <label className={css.field}>
-            Password
+            <span className={css.visuallyHidden}>Password</span>
             <input
               className={`${css.input} ${hasLoginPasswordError ? css.inputError : ''}`}
               aria-invalid={hasLoginPasswordError}
               aria-describedby='login-password-error'
               type='password'
-              placeholder='Enter your password'
+              placeholder='Password'
               {...loginForm.register('password')}
             />
             <span id='login-password-error' className={css.error} role='alert'>
@@ -212,14 +216,6 @@ export default function AuthModal() {
           </button>
         </form>
       )}
-
-      <button
-        className={css.switchMode}
-        type='button'
-        onClick={() => openAuthModal(isRegister ? 'login' : 'register')}
-      >
-        {isRegister ? 'Already have an account? Log in' : 'Need an account? Register'}
-      </button>
     </Modal>
   );
 }
