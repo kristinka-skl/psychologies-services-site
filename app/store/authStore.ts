@@ -39,6 +39,13 @@ export const useAuthStore = create<AuthState>()((set) => ({
       password
     );
     await updateProfile(credential.user, { displayName: name });
+    set({
+      user: {
+        uid: credential.user.uid,
+        name,
+        email: credential.user.email ?? email,
+      },
+    });
   },
 
   signIn: async (email, password) => {
