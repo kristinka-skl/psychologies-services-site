@@ -44,6 +44,6 @@
 
 @media (min-width: 1440px) {
   .container {
-    width: min(100% - 256px, var(--container-max-width));
+    width: min(100% - 256px, var(--card-width-desktop));
   }
 }
