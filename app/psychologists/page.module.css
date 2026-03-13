@@ -18,6 +18,7 @@
 
 .loadMoreButton {
   justify-self: center;
+  min-width: 132px;
   min-height: 44px;
   padding: 0 var(--space-24);
   border: 0;
@@ -26,6 +27,11 @@
   color: var(--color-bg-surface);
   font-size: var(--font-size-16);
   cursor: pointer;
+}
+
+.loadMoreButton:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
 }
 
 @media (min-width: 768px) {
