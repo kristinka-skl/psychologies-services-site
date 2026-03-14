@@ -79,7 +79,7 @@
   width: 100%;
   border: 0;
   background: transparent;
-  color: rgba(25, 26, 21, 0.3);
+  color: var(--color-text-muted-30);
   font-size: 16px;
   font-weight: 400;
   line-height: 1.25;
