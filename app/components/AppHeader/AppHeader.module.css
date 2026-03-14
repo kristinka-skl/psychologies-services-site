@@ -3,13 +3,13 @@
   top: 0;
   z-index: 20;
   border-bottom: 1px solid var(--color-border-primary);
-  background: var(--color-bg-surface);
+  background: var(--color-bg-page);
 }
 
 .container {
   width: min(100% - 32px, var(--container-max-width));
   margin: 0 auto;
-  min-height: 72px;
+  height: 96px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -248,20 +248,20 @@
 @media (min-width: 768px) {
   .container {
     width: min(100% - 64px, var(--container-max-width));
-    min-height: 84px;
+    height: 96px;
   }
 
   .desktopNav {
     display: flex;
-    gap: var(--space-24);
+    gap: var(--space-16);
     align-items: center;
   }
 
   .desktopNav a {
     position: relative;
     color: var(--color-text-primary);
-    font-size: var(--font-size-16);
-    line-height: var(--line-height-20);
+    font-size: var(--font-size-14);
+    line-height: var(--line-height-18);
     border-radius: var(--radius-10);
     transition: color 0.2s ease;
   }
@@ -281,18 +281,90 @@
     content: '';
     position: absolute;
     left: 50%;
-    bottom: -10px;
+    bottom: -8px;
     transform: translateX(-50%);
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: var(--color-brand);
   }
 
   .desktopActions {
     display: flex;
-    gap: var(--space-8);
+    gap: var(--space-4);
     align-items: center;
+  }
+
+  .desktopActionsAuthorized {
+    gap: var(--space-12);
+  }
+
+  .desktopActions .primaryButton,
+  .desktopActions .secondaryButton {
+    width: auto;
+    height: 44px;
+    padding-inline: var(--space-16);
+    font-size: var(--font-size-14);
+  }
+
+  .desktopActions .secondaryButton {
+    min-width: 80px;
+  }
+
+  .desktopActionsAuthorized .secondaryButton {
+    min-width: 112px;
+  }
+
+  .desktopActions .primaryButton {
+    min-width: 128px;
+  }
+
+  .userInfo {
+    min-width: auto;
+    gap: var(--space-8);
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .avatar svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .userName {
+    display: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .burgerButton {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktopNav {
+    gap: var(--space-24);
+  }
+
+  .desktopNav a {
+    font-size: var(--font-size-16);
+    line-height: var(--line-height-20);
+  }
+
+  .desktopNav a.active::after,
+  .active::after {
+    bottom: -10px;
+    width: 8px;
+    height: 8px;
+  }
+
+  .desktopActions {
+    gap: var(--space-8);
   }
 
   .desktopActionsAuthorized {
@@ -301,7 +373,8 @@
 
   .desktopActions .primaryButton,
   .desktopActions .secondaryButton {
-    width: auto;
+    height: 48px;
+    font-size: var(--font-size-16);
     padding-inline: var(--space-20);
   }
 
@@ -311,22 +384,36 @@
 
   .desktopActionsAuthorized .secondaryButton {
     min-width: 135px;
-    height: 48px;
   }
 
   .desktopActions .primaryButton {
     min-width: 160px;
   }
 
-  .burgerButton {
-    display: none;
+  .userInfo {
+    gap: var(--space-12);
+    min-width: 90px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .avatar svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .userName {
+    display: block;
   }
 }
 
 @media (min-width: 1440px) {
   .container {
     width: min(100% - 256px, var(--card-width-desktop));
-    min-height: 96px;
+    height: 96px;
   }
 
   .desktopActions .primaryButton,
