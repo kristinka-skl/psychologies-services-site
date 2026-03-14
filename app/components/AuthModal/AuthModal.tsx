@@ -62,12 +62,17 @@ export default function AuthModal() {
     : 'Show password';
   const passwordToggleIcon = isPasswordVisible ? 'icon-eye-off' : 'icon-eye';
 
+  function handleCloseAuthModal() {
+    setIsPasswordVisible(false);
+    closeAuthModal();
+  }
+
   const onLoginSubmit = async (values: AuthLoginValues) => {
     try {
       await signIn(values.email, values.password);
       notifySuccess('authLoginSuccess');
       loginForm.reset();
-      closeAuthModal();
+      handleCloseAuthModal();
     } catch (error: unknown) {
       notifyError(error, 'authLogin');
     }
@@ -78,7 +83,7 @@ export default function AuthModal() {
       await signUp(values.name, values.email, values.password);
       notifySuccess('authRegisterSuccess');
       registerForm.reset();
-      closeAuthModal();
+      handleCloseAuthModal();
     } catch (error: unknown) {
       notifyError(error, 'authRegister');
     }
@@ -86,7 +91,6 @@ export default function AuthModal() {
 
   useEffect(() => {
     if (!isAuthModalOpen) {
-      setIsPasswordVisible(false);
       return;
     }
 
@@ -100,7 +104,7 @@ export default function AuthModal() {
   return (
     <Modal
       isOpen={isAuthModalOpen}
-      onClose={closeAuthModal}
+      onClose={handleCloseAuthModal}
       title={isRegister ? 'Create account' : 'Log in'}
     >
       <p className={css.description}>{descriptionText}</p>

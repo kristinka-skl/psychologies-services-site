@@ -28,9 +28,7 @@ export default function FavoritesPage() {
   const [removingCards, setRemovingCards] = useState<
     Record<string, RemovingFavoriteCard>
   >({});
-  const removeTimersRef = useRef<
-    Partial<Record<string, ReturnType<typeof window.setTimeout>>>
-  >({});
+  const removeTimersRef = useRef<Partial<Record<string, ReturnType<typeof setTimeout>>>>({});
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const loading = useAuthStore((state) => state.loading);
@@ -115,10 +113,12 @@ export default function FavoritesPage() {
   const removingIdSet = useMemo(() => new Set(removingIds), [removingIds]);
 
   useEffect(() => {
+    const timers = removeTimersRef.current;
+
     return () => {
-      Object.values(removeTimersRef.current).forEach((timerId) => {
+      Object.values(timers).forEach((timerId) => {
         if (timerId) {
-          window.clearTimeout(timerId);
+          clearTimeout(timerId);
         }
       });
     };
@@ -128,7 +128,7 @@ export default function FavoritesPage() {
     const timerId = removeTimersRef.current[id];
 
     if (timerId) {
-      window.clearTimeout(timerId);
+      clearTimeout(timerId);
       delete removeTimersRef.current[id];
     }
 
@@ -172,7 +172,7 @@ export default function FavoritesPage() {
 
     try {
       await toggleFavoriteForUser(user.uid, id);
-      removeTimersRef.current[id] = window.setTimeout(
+      removeTimersRef.current[id] = setTimeout(
         () => finalizeRemovingCard(id),
         REMOVE_CARD_ANIMATION_MS
       );
