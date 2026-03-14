@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import {
   notifyError,
-  notifyErrorMessage,
   notifySuccess,
 } from '@/app/lib/notifications';
 import {
@@ -83,27 +82,6 @@ export default function AuthModal() {
     }
   };
 
-  const onInvalidLoginSubmit = (
-    errors: Partial<Record<keyof AuthLoginValues, { message?: string }>>
-  ) => {
-    const firstError =
-      errors.email?.message ??
-      errors.password?.message ??
-      'Please check highlighted fields.';
-    notifyErrorMessage(firstError);
-  };
-
-  const onInvalidRegisterSubmit = (
-    errors: Partial<Record<keyof AuthRegisterValues, { message?: string }>>
-  ) => {
-    const firstError =
-      errors.name?.message ??
-      errors.email?.message ??
-      errors.password?.message ??
-      'Please check highlighted fields.';
-    notifyErrorMessage(firstError);
-  };
-
   useEffect(() => {
     if (!isAuthModalOpen) {
       setIsPasswordVisible(false);
@@ -130,10 +108,7 @@ export default function AuthModal() {
           key='register-form'
           className={css.form}
           noValidate
-          onSubmit={registerForm.handleSubmit(
-            onRegisterSubmit,
-            onInvalidRegisterSubmit
-          )}
+          onSubmit={registerForm.handleSubmit(onRegisterSubmit)}
         >
           <label className={css.field}>
             <span className={css.visuallyHidden}>Name</span>
@@ -199,7 +174,7 @@ export default function AuthModal() {
           key='login-form'
           className={css.form}
           noValidate
-          onSubmit={loginForm.handleSubmit(onLoginSubmit, onInvalidLoginSubmit)}
+          onSubmit={loginForm.handleSubmit(onLoginSubmit)}
         >
           <label className={css.field}>
             <span className={css.visuallyHidden}>Email</span>

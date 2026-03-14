@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { notifyError, notifySuccess } from '@/app/lib/notifications';
+import { notifyError } from '@/app/lib/notifications';
 import { useAuthStore } from '@/app/store/authStore';
 import { useUiStore } from '@/app/store/uiStore';
 import css from '@/app/components/AppHeader/AppHeader.module.css';
@@ -23,7 +23,6 @@ export default function AppHeader() {
     setIsLoggingOut(true);
     try {
       await signOut();
-      notifySuccess('authLogoutSuccess');
     } catch (error: unknown) {
       notifyError(error, 'authLogout');
     } finally {
