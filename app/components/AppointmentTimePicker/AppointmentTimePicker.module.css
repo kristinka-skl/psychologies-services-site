@@ -22,8 +22,8 @@
 }
 
 .button.buttonError {
-  border-color: #d64045;
-  box-shadow: 0 0 0 1px #d64045;
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 1px var(--color-error);
 }
 
 .button:focus {
@@ -32,7 +32,7 @@
 }
 
 .button.buttonError:focus {
-  border-color: #d64045;
+  border-color: var(--color-error);
 }
 
 .option:focus-visible {
@@ -75,7 +75,7 @@
   padding-right: var(--space-4);
   scrollbar-gutter: stable;
   scrollbar-width: thin;
-  scrollbar-color: rgba(25, 26, 21, 0.2) transparent;
+  scrollbar-color: var(--color-border-primary) transparent;
 }
 
 .list::-webkit-scrollbar {
@@ -87,12 +87,12 @@
 }
 
 .list::-webkit-scrollbar-thumb {
-  background: rgba(25, 26, 21, 0.16);
+  background: var(--color-scrollbar-thumb);
   border-radius: var(--radius-pill);
 }
 
 .list::-webkit-scrollbar-thumb:hover {
-  background: rgba(25, 26, 21, 0.24);
+  background: var(--color-scrollbar-thumb-hover);
 }
 
 .option {
@@ -119,7 +119,7 @@
   position: absolute;
   top: calc(100% + 2px);
   left: 0;
-  color: #d64045;
+  color: var(--color-error);
   font-size: 11px;
   line-height: 1.1;
 }

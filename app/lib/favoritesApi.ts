@@ -82,7 +82,6 @@ export async function getUserFavoriteIds(uid: string): Promise<string[]> {
             }
       );
     } catch {
-      // Non-blocking migration: keep resolved IDs in UI even if sync-write fails.
     }
   }
 

@@ -1,5 +1,4 @@
 :root {
-  /* Core colors */
   --color-bg-page: #f3f3f3;
   --color-bg-surface: #fbfbfb;
   --color-bg-avatar-neutral: #e0e0e0;
@@ -7,6 +6,8 @@
   --color-text-muted: #8a8a89;
   --color-text-muted-50: rgba(25, 26, 21, 0.5);
   --color-text-muted-30: rgba(25, 26, 21, 0.3);
+  --color-text-on-brand-muted: rgba(251, 251, 251, 0.75);
+  --color-error: #d64045;
   --color-brand: #54be96;
   --color-brand-hover: #36a379;
   --color-brand-softest: rgba(84, 190, 150, 0.12);
@@ -15,10 +16,16 @@
   --color-accent-yellow: #fbc75e;
   --color-border-primary: rgba(25, 26, 21, 0.2);
   --color-border-brand-soft: rgba(84, 190, 150, 0.2);
+  --color-backdrop-35: rgba(25, 26, 21, 0.35);
+  --color-backdrop-40: rgba(25, 26, 21, 0.4);
+  --color-scrollbar-thumb: rgba(25, 26, 21, 0.16);
+  --color-scrollbar-thumb-hover: rgba(25, 26, 21, 0.24);
+  --color-palette-green: #54be96;
+  --color-palette-orange: #fc832c;
+  --color-palette-blue: #3470ff;
   --color-star: #ffc531;
   --color-white: #ffffff;
 
-  /* Typography */
   --font-family-base: var(--font-inter-sans), 'Inter', sans-serif;
   --font-size-14: 14px;
   --font-size-16: 16px;
@@ -40,7 +47,6 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  /* Spacing scale */
   --space-4: 4px;
   --space-8: 8px;
   --space-10: 10px;
@@ -58,7 +64,6 @@
   --space-120: 120px;
   --space-128: 128px;
 
-  /* Radius */
   --radius-10: 10px;
   --radius-13: 13px;
   --radius-14: 14px;
@@ -68,23 +73,44 @@
   --radius-30: 30px;
   --radius-pill: 9999px;
 
-  /* Elevation */
   --shadow-dropdown: 0 20px 69px 0 rgba(0, 0, 0, 0.07);
+  --shadow-floating: 0 8px 24px rgba(0, 0, 0, 0.08);
   --focus-outline-brand: 2px solid var(--color-brand);
 
-  /* Layout */
   --container-max-width: 1440px;
   --layout-gutter-desktop: 128px;
   --card-width-desktop: 1184px;
 
-  /* Breakpoints (mobile-first) */
   --bp-mobile: 320px;
   --bp-tablet: 768px;
   --bp-desktop: 1440px;
 
-  /* Compatibility aliases */
   --background: var(--color-bg-page);
   --foreground: var(--color-text-primary);
+}
+
+html[data-theme='green'] {
+  --color-brand: #54be96;
+  --color-brand-hover: #36a379;
+  --color-brand-softest: rgba(84, 190, 150, 0.12);
+  --color-border-brand-soft: rgba(84, 190, 150, 0.2);
+  --color-price: #38cd3e;
+}
+
+html[data-theme='orange'] {
+  --color-brand: #fc832c;
+  --color-brand-hover: #ff6928;
+  --color-brand-softest: rgba(252, 131, 44, 0.12);
+  --color-border-brand-soft: rgba(252, 131, 44, 0.2);
+  --color-price: #e66b19;
+}
+
+html[data-theme='blue'] {
+  --color-brand: #3470ff;
+  --color-brand-hover: #0053c0;
+  --color-brand-softest: rgba(52, 112, 255, 0.12);
+  --color-border-brand-soft: rgba(52, 112, 255, 0.2);
+  --color-price: #1f6de2;
 }
 
 html,

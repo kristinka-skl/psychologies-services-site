@@ -187,7 +187,7 @@
 }
 
 .statLabel {
-  color: rgba(251, 251, 251, 0.75);
+  color: var(--color-text-on-brand-muted);
   font-size: var(--font-size-14);
 }
 

@@ -95,13 +95,13 @@
 
 .input.inputError,
 .textarea.inputError {
-  border-color: #d64045;
-  box-shadow: 0 0 0 1px #d64045;
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 1px var(--color-error);
 }
 
 .input.inputError:focus,
 .textarea.inputError:focus {
-  border-color: #d64045;
+  border-color: var(--color-error);
 }
 
 .textarea {
@@ -123,7 +123,7 @@
   position: absolute;
   top: calc(100% + 2px);
   left: 0;
-  color: #d64045;
+  color: var(--color-error);
   font-size: 11px;
   line-height: 1.1;
 }

@@ -63,7 +63,7 @@
 .drawerBackdrop {
   position: fixed;
   inset: 0;
-  background: rgba(25, 26, 21, 0.35);
+  background: var(--color-backdrop-35);
 }
 
 .drawer {

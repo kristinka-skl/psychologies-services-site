@@ -71,7 +71,7 @@
 .metaDivider {
   width: 1px;
   height: 20px;
-  background: rgba(25, 26, 21, 0.2);
+  background: var(--color-border-primary);
 }
 
 .price {

@@ -5,11 +5,13 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import AuthModal from '@/app/components/AuthModal/AuthModal';
+import PaletteSwitcher from '@/app/components/PaletteSwitcher/PaletteSwitcher';
 import { auth } from '@/app/lib/firebaseSdk';
 import { getUserFavoriteIds } from '@/app/lib/favoritesApi';
 import { notifyError } from '@/app/lib/notifications';
 import { useAuthStore } from '@/app/store/authStore';
 import { useFavoritesStore } from '@/app/store/favoritesStore';
+import { usePaletteStore } from '@/app/store/paletteStore';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -82,13 +84,25 @@ function AuthListener() {
   return null;
 }
 
+function PaletteThemeSync() {
+  const palette = usePaletteStore((state) => state.palette);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = palette;
+  }, [palette]);
+
+  return null;
+}
+
 export default function Providers({ children }: ProvidersProps) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthListener />
+      <PaletteThemeSync />
       {children}
+      <PaletteSwitcher />
       <AuthModal />
       <Toaster position='top-right' />
     </QueryClientProvider>
