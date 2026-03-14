@@ -53,6 +53,19 @@
   line-height: var(--line-height-24);
   font-weight: var(--font-weight-medium);
   white-space: nowrap;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.cta:hover,
+.cta:focus-visible {
+  background: var(--color-brand-hover);
+}
+
+.cta:focus-visible {
+  outline: var(--focus-outline-brand);
+  outline-offset: 2px;
 }
 
 .ctaIcon {

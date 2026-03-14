@@ -37,6 +37,20 @@
   color: var(--color-text-primary);
   font-size: 30px;
   cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.closeButton:hover,
+.closeButton:focus-visible {
+  background: var(--color-brand-softest);
+  color: var(--color-brand);
+}
+
+.closeButton:focus-visible {
+  outline: var(--focus-outline-brand);
+  outline-offset: 2px;
 }
 
 .title {

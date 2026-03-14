@@ -84,4 +84,15 @@
   font-size: var(--font-size-16);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submitButton:hover,
+.submitButton:focus-visible {
+  background: var(--color-brand-hover);
+}
+
+.submitButton:focus-visible {
+  outline: var(--focus-outline-brand);
+  outline-offset: 2px;
 }

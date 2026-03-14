@@ -8,6 +8,8 @@
   --color-text-muted-50: rgba(25, 26, 21, 0.5);
   --color-text-muted-30: rgba(25, 26, 21, 0.3);
   --color-brand: #54be96;
+  --color-brand-hover: #36a379;
+  --color-brand-softest: rgba(84, 190, 150, 0.12);
   --color-price: #38cd3e;
   --color-accent-violet: #4535af;
   --color-accent-yellow: #fbc75e;
@@ -68,6 +70,7 @@
 
   /* Elevation */
   --shadow-dropdown: 0 20px 69px 0 rgba(0, 0, 0, 0.07);
+  --focus-outline-brand: 2px solid var(--color-brand);
 
   /* Layout */
   --container-max-width: 1440px;
