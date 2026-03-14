@@ -1,3 +1,5 @@
+import { AppError, AppErrorKind, normalizeError } from '@/app/lib/errors';
+
 interface FirebaseRestRequestOptions extends RequestInit {
   authToken?: string;
   queryParams?: Record<string, string | number | boolean | undefined>;
@@ -11,6 +13,22 @@ interface FirebaseRestErrorPayload {
 }
 
 const DEFAULT_TIMEOUT_MS = 10000;
+
+function getErrorKindByStatus(status: number): AppErrorKind {
+  if (status === 401) {
+    return 'auth';
+  }
+
+  if (status === 403) {
+    return 'permission';
+  }
+
+  if (status === 404) {
+    return 'notFound';
+  }
+
+  return 'unknown';
+}
 
 function getDatabaseBaseUrl(): string {
   const databaseUrl = process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL;
@@ -106,16 +124,24 @@ export async function requestJson<T>(
         parsedBody as FirebaseRestErrorPayload | null,
         response
       );
-      throw new Error(message);
+      throw new AppError(message, {
+        kind: getErrorKindByStatus(response.status),
+        status: response.status,
+        code: (parsedBody as FirebaseRestErrorPayload | null)?.error?.message,
+      });
     }
 
     return parsedBody as T;
   } catch (error) {
     if (error instanceof Error && error.name === 'AbortError') {
-      throw new Error('Firebase REST request timed out');
+      throw new AppError('Firebase REST request timed out', {
+        kind: 'timeout',
+        code: 'request/timeout',
+        cause: error,
+      });
     }
 
-    throw error;
+    throw normalizeError(error);
   } finally {
     clearTimeout(timeoutId);
   }

@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
+import { ChangeEvent, ClipboardEvent, FocusEvent, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Image from 'next/image';
 import { useForm, useWatch } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import Modal from '@/app/components/Modal/Modal';
 import AppointmentTimePicker from '@/app/components/AppointmentTimePicker/AppointmentTimePicker';
 import { APPOINTMENT_TIME_OPTIONS } from '@/app/lib/appointmentTimeOptions';
+import { notifySuccess } from '@/app/lib/notifications';
 import { appointmentSchema, AppointmentValues } from '@/app/lib/validation';
 import css from '@/app/components/AppointmentModal/AppointmentModal.module.css';
 
@@ -24,6 +24,19 @@ export default function AppointmentModal({
   psychologistAvatarUrl,
   onClose,
 }: AppointmentModalProps) {
+  const sanitizePhoneValue = (value: string) => {
+    const allowedCharactersOnly = value.replace(/[^\d+\s()-]/g, '');
+
+    if (!allowedCharactersOnly) {
+      return '';
+    }
+
+    const hasLeadingPlus = allowedCharactersOnly.startsWith('+');
+    const valueWithoutPluses = allowedCharactersOnly.replace(/\+/g, '');
+
+    return hasLeadingPlus ? `+${valueWithoutPluses}` : valueWithoutPluses;
+  };
+
   const form = useForm<AppointmentValues>({
     resolver: yupResolver(appointmentSchema),
     mode: 'onTouched',
@@ -40,6 +53,7 @@ export default function AppointmentModal({
     control: form.control,
     name: 'time',
   });
+  const phoneField = form.register('phone');
   const errors = form.formState.errors;
   const shouldShowErrors = form.formState.submitCount > 0;
 
@@ -52,9 +66,68 @@ export default function AppointmentModal({
   }, [isOpen, form]);
 
   const onSubmit = () => {
-    toast.success(`Request sent to ${psychologistName}`);
+    notifySuccess('appointmentRequestSent', { psychologistName });
     form.reset();
     onClose();
+  };
+
+  const onPhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const sanitizedValue = sanitizePhoneValue(event.target.value);
+
+    form.setValue('phone', sanitizedValue, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  };
+
+  const onPhonePaste = (event: ClipboardEvent<HTMLInputElement>) => {
+    event.preventDefault();
+
+    const input = event.currentTarget;
+    const start = input.selectionStart ?? input.value.length;
+    const end = input.selectionEnd ?? input.value.length;
+    const pastedText = event.clipboardData.getData('text');
+    const rawValue =
+      input.value.slice(0, start) + pastedText + input.value.slice(end);
+    const sanitizedValue = sanitizePhoneValue(rawValue);
+    const nextCaretValue = sanitizePhoneValue(input.value.slice(0, start) + pastedText);
+    const nextCaretPosition = nextCaretValue.length;
+
+    form.setValue('phone', sanitizedValue, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+
+    requestAnimationFrame(() => {
+      input.setSelectionRange(nextCaretPosition, nextCaretPosition);
+    });
+  };
+
+  const onPhoneFocus = (event: FocusEvent<HTMLInputElement>) => {
+    const input = event.currentTarget;
+    const value = input.value;
+
+    if (!value) {
+      form.setValue('phone', '+380', {
+        shouldValidate: false,
+        shouldDirty: false,
+        shouldTouch: false,
+      });
+
+      requestAnimationFrame(() => {
+        input.setSelectionRange(4, 4);
+      });
+
+      return;
+    }
+
+    if (value === '+380') {
+      requestAnimationFrame(() => {
+        input.setSelectionRange(4, 4);
+      });
+    }
   };
 
   return (
@@ -70,7 +143,7 @@ export default function AppointmentModal({
         psychologist. We guarantee confidentiality and respect for your privacy.
       </p>
 
-      <div className={css.psychologistBlock}>
+      <figure className={css.psychologistBlock}>
         <Image
           className={css.psychologistAvatar}
           src={psychologistAvatarUrl}
@@ -79,11 +152,11 @@ export default function AppointmentModal({
           height={44}
           unoptimized
         />
-        <div>
+        <figcaption>
           <p className={css.psychologistLabel}>Your psychologist</p>
           <p className={css.psychologistName}>{psychologistName}</p>
-        </div>
-      </div>
+        </figcaption>
+      </figure>
 
       <form className={css.form} onSubmit={form.handleSubmit(onSubmit)}>
         <label className={css.field}>
@@ -91,11 +164,14 @@ export default function AppointmentModal({
           <input
             className={`${css.input} ${shouldShowErrors && errors.name ? css.inputError : ''}`}
             aria-invalid={shouldShowErrors && Boolean(errors.name)}
+            aria-describedby={
+              shouldShowErrors && errors.name ? 'appointment-name-error' : undefined
+            }
             type='text'
             placeholder='Name'
             {...form.register('name')}
           />
-          <span className={css.error}>
+          <span id='appointment-name-error' className={css.error}>
             {shouldShowErrors ? errors.name?.message : ''}
           </span>
         </label>
@@ -105,11 +181,14 @@ export default function AppointmentModal({
           <input
             className={`${css.input} ${shouldShowErrors && errors.email ? css.inputError : ''}`}
             aria-invalid={shouldShowErrors && Boolean(errors.email)}
+            aria-describedby={
+              shouldShowErrors && errors.email ? 'appointment-email-error' : undefined
+            }
             type='email'
             placeholder='Email'
             {...form.register('email')}
           />
-          <span className={css.error}>
+          <span id='appointment-email-error' className={css.error}>
             {shouldShowErrors ? errors.email?.message : ''}
           </span>
         </label>
@@ -120,11 +199,17 @@ export default function AppointmentModal({
             <input
               className={`${css.input} ${shouldShowErrors && errors.phone ? css.inputError : ''}`}
               aria-invalid={shouldShowErrors && Boolean(errors.phone)}
+              aria-describedby={
+                shouldShowErrors && errors.phone ? 'appointment-phone-error' : undefined
+              }
               type='tel'
               placeholder='+380'
-              {...form.register('phone')}
+              {...phoneField}
+              onChange={onPhoneChange}
+              onPaste={onPhonePaste}
+              onFocus={onPhoneFocus}
             />
-            <span className={css.error}>
+            <span id='appointment-phone-error' className={css.error}>
               {shouldShowErrors ? errors.phone?.message : ''}
             </span>
           </label>
@@ -136,6 +221,9 @@ export default function AppointmentModal({
               options={APPOINTMENT_TIME_OPTIONS}
               error={shouldShowErrors ? errors.time?.message : ''}
               hasError={shouldShowErrors && Boolean(errors.time)}
+              buttonId='appointment-time-button'
+              errorId='appointment-time-error'
+              listboxId='appointment-time-listbox'
               onSelect={(time) => {
                 form.setValue('time', time, {
                   shouldValidate: true,
@@ -153,11 +241,16 @@ export default function AppointmentModal({
           <textarea
             className={`${css.textarea} ${shouldShowErrors && errors.comment ? css.inputError : ''}`}
             aria-invalid={shouldShowErrors && Boolean(errors.comment)}
+            aria-describedby={
+              shouldShowErrors && errors.comment
+                ? 'appointment-comment-error'
+                : undefined
+            }
             rows={4}
             placeholder='Comment'
             {...form.register('comment')}
           />
-          <span className={css.error}>
+          <span id='appointment-comment-error' className={css.error}>
             {shouldShowErrors ? errors.comment?.message : ''}
           </span>
         </label>

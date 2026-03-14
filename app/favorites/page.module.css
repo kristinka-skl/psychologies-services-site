@@ -32,6 +32,27 @@
 .cards {
   display: grid;
   gap: var(--space-16);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cardItem {
+  max-height: 2000px;
+  opacity: 1;
+  transform: translateY(0);
+  overflow: hidden;
+  transition:
+    max-height 0.24s ease,
+    opacity 0.24s ease,
+    transform 0.24s ease;
+}
+
+.cardItemRemoving {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
 }
 
 .loadMoreButton {
@@ -94,6 +115,16 @@
 @media (min-width: 768px) {
   .container {
     width: min(100% - 64px, var(--container-max-width));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardItem {
+    transition-duration: 0.01ms;
+  }
+
+  .cardItemRemoving {
+    transform: none;
   }
 }
 

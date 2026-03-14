@@ -2,11 +2,12 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { onAuthStateChanged } from 'firebase/auth';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import AuthModal from '@/app/components/AuthModal/AuthModal';
 import { auth } from '@/app/lib/firebaseSdk';
 import { getUserFavoriteIds } from '@/app/lib/favoritesApi';
+import { notifyError } from '@/app/lib/notifications';
 import { useAuthStore } from '@/app/store/authStore';
 import { useFavoritesStore } from '@/app/store/favoritesStore';
 
@@ -19,6 +20,7 @@ function AuthListener() {
   const setLoading = useAuthStore((state) => state.setLoading);
   const setFavorites = useFavoritesStore((state) => state.setFavorites);
   const clearFavorites = useFavoritesStore((state) => state.clearFavorites);
+  const hasShownFavoritesLoadError = useRef(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -30,6 +32,7 @@ function AuthListener() {
       if (!firebaseUser) {
         setUser(null);
         clearFavorites();
+        hasShownFavoritesLoadError.current = false;
         setLoading(false);
         return;
       }
@@ -48,11 +51,18 @@ function AuthListener() {
         }
 
         setFavorites(favoriteIds);
-      } catch {
+        hasShownFavoritesLoadError.current = false;
+      } catch (error: unknown) {
         if (!isMounted || currentEventId !== authEventId) {
           return;
         }
 
+        if (!hasShownFavoritesLoadError.current) {
+          notifyError(error, 'favoritesLoad', {
+            toastId: 'favorites-load-sync-error',
+          });
+          hasShownFavoritesLoadError.current = true;
+        }
         clearFavorites();
       } finally {
         if (!isMounted || currentEventId !== authEventId) {

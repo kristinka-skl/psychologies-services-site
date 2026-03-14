@@ -3,8 +3,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import getAuthErrorMessage from '@/app/lib/getAuthErrorMessage';
+import {
+  notifyError,
+  notifySuccess,
+} from '@/app/lib/notifications';
 import {
   authLoginSchema,
   authRegisterSchema,
@@ -49,6 +51,8 @@ export default function AuthModal() {
   const hasRegisterNameError = Boolean(registerErrors.name?.message);
   const hasRegisterEmailError = Boolean(registerErrors.email?.message);
   const hasRegisterPasswordError = Boolean(registerErrors.password?.message);
+  const isLoginSubmitting = loginForm.formState.isSubmitting;
+  const isRegisterSubmitting = registerForm.formState.isSubmitting;
   const descriptionText = isRegister
     ? 'Thank you for your interest in our platform! In order to register, we need some information. Please provide us with the following information.'
     : 'Welcome back! Please enter your credentials to access your account and continue your search for a psychologist.';
@@ -58,52 +62,35 @@ export default function AuthModal() {
     : 'Show password';
   const passwordToggleIcon = isPasswordVisible ? 'icon-eye-off' : 'icon-eye';
 
+  function handleCloseAuthModal() {
+    setIsPasswordVisible(false);
+    closeAuthModal();
+  }
+
   const onLoginSubmit = async (values: AuthLoginValues) => {
     try {
       await signIn(values.email, values.password);
-      toast.success('You are logged in');
+      notifySuccess('authLoginSuccess');
       loginForm.reset();
-      closeAuthModal();
+      handleCloseAuthModal();
     } catch (error: unknown) {
-      toast.error(getAuthErrorMessage(error, 'Login failed'));
+      notifyError(error, 'authLogin');
     }
   };
 
   const onRegisterSubmit = async (values: AuthRegisterValues) => {
     try {
       await signUp(values.name, values.email, values.password);
-      toast.success('Registration successful');
+      notifySuccess('authRegisterSuccess');
       registerForm.reset();
-      closeAuthModal();
+      handleCloseAuthModal();
     } catch (error: unknown) {
-      toast.error(getAuthErrorMessage(error, 'Registration failed'));
+      notifyError(error, 'authRegister');
     }
-  };
-
-  const onInvalidLoginSubmit = (
-    errors: Partial<Record<keyof AuthLoginValues, { message?: string }>>
-  ) => {
-    const firstError =
-      errors.email?.message ??
-      errors.password?.message ??
-      'Please check highlighted fields.';
-    toast.error(firstError);
-  };
-
-  const onInvalidRegisterSubmit = (
-    errors: Partial<Record<keyof AuthRegisterValues, { message?: string }>>
-  ) => {
-    const firstError =
-      errors.name?.message ??
-      errors.email?.message ??
-      errors.password?.message ??
-      'Please check highlighted fields.';
-    toast.error(firstError);
   };
 
   useEffect(() => {
     if (!isAuthModalOpen) {
-      setIsPasswordVisible(false);
       return;
     }
 
@@ -117,7 +104,7 @@ export default function AuthModal() {
   return (
     <Modal
       isOpen={isAuthModalOpen}
-      onClose={closeAuthModal}
+      onClose={handleCloseAuthModal}
       title={isRegister ? 'Create account' : 'Log in'}
     >
       <p className={css.description}>{descriptionText}</p>
@@ -127,10 +114,7 @@ export default function AuthModal() {
           key='register-form'
           className={css.form}
           noValidate
-          onSubmit={registerForm.handleSubmit(
-            onRegisterSubmit,
-            onInvalidRegisterSubmit
-          )}
+          onSubmit={registerForm.handleSubmit(onRegisterSubmit)}
         >
           <label className={css.field}>
             <span className={css.visuallyHidden}>Name</span>
@@ -139,6 +123,7 @@ export default function AuthModal() {
               aria-invalid={hasRegisterNameError}
               aria-describedby='register-name-error'
               type='text'
+              autoComplete='name'
               placeholder='Name'
               {...registerForm.register('name')}
             />
@@ -154,6 +139,7 @@ export default function AuthModal() {
               aria-invalid={hasRegisterEmailError}
               aria-describedby='register-email-error'
               type='email'
+              autoComplete='email'
               placeholder='Email'
               {...registerForm.register('email')}
             />
@@ -169,6 +155,7 @@ export default function AuthModal() {
               aria-invalid={hasRegisterPasswordError}
               aria-describedby='register-password-error'
               type={passwordInputType}
+              autoComplete='new-password'
               placeholder='Password'
               {...registerForm.register('password')}
             />
@@ -176,6 +163,7 @@ export default function AuthModal() {
               className={css.passwordToggle}
               type='button'
               aria-label={passwordToggleLabel}
+              disabled={isRegisterSubmitting}
               onClick={() => setIsPasswordVisible((prev) => !prev)}
             >
               <svg className={css.passwordToggleIcon} aria-hidden='true'>
@@ -187,8 +175,12 @@ export default function AuthModal() {
             </span>
           </label>
 
-          <button className={css.submitButton} type='submit'>
-            Register
+          <button
+            className={css.submitButton}
+            type='submit'
+            disabled={isRegisterSubmitting}
+          >
+            {isRegisterSubmitting ? 'Registering...' : 'Register'}
           </button>
         </form>
       ) : (
@@ -196,7 +188,7 @@ export default function AuthModal() {
           key='login-form'
           className={css.form}
           noValidate
-          onSubmit={loginForm.handleSubmit(onLoginSubmit, onInvalidLoginSubmit)}
+          onSubmit={loginForm.handleSubmit(onLoginSubmit)}
         >
           <label className={css.field}>
             <span className={css.visuallyHidden}>Email</span>
@@ -205,6 +197,7 @@ export default function AuthModal() {
               aria-invalid={hasLoginEmailError}
               aria-describedby='login-email-error'
               type='email'
+              autoComplete='email'
               placeholder='Email'
               {...loginForm.register('email')}
             />
@@ -220,6 +213,7 @@ export default function AuthModal() {
               aria-invalid={hasLoginPasswordError}
               aria-describedby='login-password-error'
               type={passwordInputType}
+              autoComplete='current-password'
               placeholder='Password'
               {...loginForm.register('password')}
             />
@@ -227,6 +221,7 @@ export default function AuthModal() {
               className={css.passwordToggle}
               type='button'
               aria-label={passwordToggleLabel}
+              disabled={isLoginSubmitting}
               onClick={() => setIsPasswordVisible((prev) => !prev)}
             >
               <svg className={css.passwordToggleIcon} aria-hidden='true'>
@@ -238,8 +233,12 @@ export default function AuthModal() {
             </span>
           </label>
 
-          <button className={css.submitButton} type='submit'>
-            Log in
+          <button
+            className={css.submitButton}
+            type='submit'
+            disabled={isLoginSubmitting}
+          >
+            {isLoginSubmitting ? 'Logging in...' : 'Log in'}
           </button>
         </form>
       )}

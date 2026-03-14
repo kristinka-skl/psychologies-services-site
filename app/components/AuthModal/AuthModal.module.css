@@ -85,6 +85,11 @@
   height: 20px;
 }
 
+.passwordToggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
 .error {
   position: absolute;
   top: calc(100% + 2px);
@@ -113,12 +118,17 @@
   transition: background-color 0.2s ease;
 }
 
-.submitButton:hover,
-.submitButton:focus-visible {
+.submitButton:not(:disabled):hover,
+.submitButton:not(:disabled):focus-visible {
   background: var(--color-brand-hover);
 }
 
 .submitButton:focus-visible {
   outline: var(--focus-outline-brand);
   outline-offset: 2px;
+}
+
+.submitButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
 }

@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import toast from 'react-hot-toast';
 import AppointmentModal from '@/app/components/AppointmentModal/AppointmentModal';
+import { notifyError, notifyInfo } from '@/app/lib/notifications';
 import { Psychologist } from '@/app/types/psychologist';
 import { useAuthStore } from '@/app/store/authStore';
 import { useFavoritesStore } from '@/app/store/favoritesStore';
@@ -12,9 +12,15 @@ import css from '@/app/components/PsychologistCard/PsychologistCard.module.css';
 
 interface PsychologistCardProps {
   psychologist: Psychologist;
+  isRemoving?: boolean;
+  onRequestUnfavorite?: (id: string) => Promise<void>;
 }
 
-export default function PsychologistCard({ psychologist }: PsychologistCardProps) {
+export default function PsychologistCard({
+  psychologist,
+  isRemoving = false,
+  onRequestUnfavorite,
+}: PsychologistCardProps) {
   const user = useAuthStore((state) => state.user);
   const isFavorite = useFavoritesStore((state) =>
     state.isFavorite(psychologist.id)
@@ -26,23 +32,28 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
   const [isExpanded, setIsExpanded] = useState(false);
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
   const [isFavoriteUpdating, setIsFavoriteUpdating] = useState(false);
+  const reviewsHeadingId = `psychologist-reviews-${psychologist.id}`;
 
   const onFavoriteClick = async () => {
-    if (isFavoriteUpdating) {
+    if (isFavoriteUpdating || isRemoving) {
       return;
     }
 
     if (!user) {
-      toast.error('Favorites are available only for authorized users');
+      notifyInfo('favoritesRequireAuth');
       openAuthModal('login');
       return;
     }
 
     setIsFavoriteUpdating(true);
     try {
-      await toggleFavoriteForUser(user.uid, psychologist.id);
-    } catch {
-      toast.error('Failed to update favorites. Please try again.');
+      if (isFavorite && onRequestUnfavorite) {
+        await onRequestUnfavorite(psychologist.id);
+      } else {
+        await toggleFavoriteForUser(user.uid, psychologist.id);
+      }
+    } catch (error: unknown) {
+      notifyError(error, 'favoritesToggle');
     } finally {
       setIsFavoriteUpdating(false);
     }
@@ -90,6 +101,7 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
               type='button'
               aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
               aria-busy={isFavoriteUpdating}
+              disabled={isFavoriteUpdating || isRemoving}
               onClick={onFavoriteClick}
             >
               <svg
@@ -130,11 +142,13 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
         </p>
 
         {isExpanded ? (
-          <div className={css.reviews}>
-            <h4 className={css.reviewsTitle}>Reviews</h4>
-            <div className={css.reviewsList}>
+          <section className={css.reviews} aria-labelledby={reviewsHeadingId}>
+            <h4 id={reviewsHeadingId} className={css.reviewsTitle}>
+              Reviews
+            </h4>
+            <ul className={css.reviewsList}>
               {psychologist.reviews.map((review) => (
-                <div key={review.reviewer} className={css.reviewItem}>
+                <li key={review.reviewer} className={css.reviewItem}>
                   <div className={css.reviewTop}>
                     <span className={css.reviewerBadge} aria-hidden='true'>
                       {review.reviewer.charAt(0)}
@@ -155,9 +169,9 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
                     </div>
                   </div>
                   <p className={css.reviewComment}>{review.comment}</p>
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
             <button
               className={css.appointmentButton}
               type='button'
@@ -166,7 +180,7 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
             >
               Make an appointment
             </button>
-          </div>
+          </section>
         ) : null}
 
         <button

@@ -11,7 +11,10 @@ const interSans = Inter({
   display: 'swap',
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: 'Psychologists Services',
   description:
     'Find experienced psychologists and book your personal consultation.',

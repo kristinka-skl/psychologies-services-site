@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import { notifyError } from '@/app/lib/notifications';
 import { useAuthStore } from '@/app/store/authStore';
 import { useUiStore } from '@/app/store/uiStore';
 import css from '@/app/components/AppHeader/AppHeader.module.css';
@@ -16,6 +16,7 @@ export default function AppHeader() {
   const openAuthModal = useUiStore((state) => state.openAuthModal);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const drawerId = 'mobile-navigation-drawer';
 
   const closeDrawer = () => setIsDrawerOpen(false);
 
@@ -23,9 +24,8 @@ export default function AppHeader() {
     setIsLoggingOut(true);
     try {
       await signOut();
-      toast.success('You have been logged out');
-    } catch {
-      toast.error('Failed to log out');
+    } catch (error: unknown) {
+      notifyError(error, 'authLogout');
     } finally {
       setIsLoggingOut(false);
     }
@@ -120,6 +120,8 @@ export default function AppHeader() {
           className={css.burgerButton}
           type='button'
           aria-label='Open menu'
+          aria-expanded={isDrawerOpen}
+          aria-controls={drawerId}
           onClick={() => setIsDrawerOpen(true)}
         >
           <svg width='20' height='20' aria-hidden='true'>
@@ -131,6 +133,7 @@ export default function AppHeader() {
       {isDrawerOpen ? (
         <div className={css.drawerBackdrop} onClick={closeDrawer} role='presentation'>
           <aside
+            id={drawerId}
             className={css.drawer}
             onClick={(event) => event.stopPropagation()}
             aria-label='Mobile menu'
@@ -150,7 +153,7 @@ export default function AppHeader() {
                 <use href='/sprite.svg#icon-close' />
               </svg>
             </button>
-            <nav className={css.drawerNav}>
+            <nav className={css.drawerNav} aria-label='Mobile navigation'>
               <Link href='/' onClick={closeDrawer}>
                 Home
               </Link>

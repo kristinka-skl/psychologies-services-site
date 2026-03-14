@@ -1,6 +1,29 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import css from '@/app/page.module.css';
+
+export const metadata: Metadata = {
+  title: 'Psychologists Services',
+  description:
+    'Find experienced psychologists and book your personal consultation.',
+  openGraph: {
+    title: 'Psychologists Services',
+    description:
+      'Find experienced psychologists and book your personal consultation.',
+    url: '/',
+    siteName: 'Psychologists Services',
+    images: [
+      {
+        url: '/og-psychology.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Psychologists Services - professional mental health support',
+      },
+    ],
+    type: 'website',
+  },
+};
 
 export default function HomePage() {
   return (
@@ -23,7 +46,10 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className={css.heroMedia}>
+        <section className={css.heroMedia} aria-labelledby='home-hero-media-title'>
+          <h2 id='home-hero-media-title' className={css.visuallyHidden}>
+            Hero illustration
+          </h2>
           <div className={css.heroImageWrap}>
             <Image
               className={css.heroImage}
@@ -58,7 +84,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </section>
     </main>
   );
