@@ -1,6 +1,29 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import css from '@/app/page.module.css';
+
+export const metadata: Metadata = {
+  title: 'Psychologists Services',
+  description:
+    'Find experienced psychologists and book your personal consultation.',
+  openGraph: {
+    title: 'Psychologists Services',
+    description:
+      'Find experienced psychologists and book your personal consultation.',
+    url: '/',
+    siteName: 'Psychologists Services',
+    images: [
+      {
+        url: '/og-psychology.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Psychologists Services - professional mental health support',
+      },
+    ],
+    type: 'website',
+  },
+};
 
 export default function HomePage() {
   return (
