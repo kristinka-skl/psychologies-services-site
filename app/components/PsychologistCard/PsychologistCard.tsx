@@ -12,9 +12,15 @@ import css from '@/app/components/PsychologistCard/PsychologistCard.module.css';
 
 interface PsychologistCardProps {
   psychologist: Psychologist;
+  isRemoving?: boolean;
+  onRequestUnfavorite?: (id: string) => Promise<void>;
 }
 
-export default function PsychologistCard({ psychologist }: PsychologistCardProps) {
+export default function PsychologistCard({
+  psychologist,
+  isRemoving = false,
+  onRequestUnfavorite,
+}: PsychologistCardProps) {
   const user = useAuthStore((state) => state.user);
   const isFavorite = useFavoritesStore((state) =>
     state.isFavorite(psychologist.id)
@@ -28,7 +34,7 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
   const [isFavoriteUpdating, setIsFavoriteUpdating] = useState(false);
 
   const onFavoriteClick = async () => {
-    if (isFavoriteUpdating) {
+    if (isFavoriteUpdating || isRemoving) {
       return;
     }
 
@@ -40,7 +46,11 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
 
     setIsFavoriteUpdating(true);
     try {
-      await toggleFavoriteForUser(user.uid, psychologist.id);
+      if (isFavorite && onRequestUnfavorite) {
+        await onRequestUnfavorite(psychologist.id);
+      } else {
+        await toggleFavoriteForUser(user.uid, psychologist.id);
+      }
     } catch (error: unknown) {
       notifyError(error, 'favoritesToggle');
     } finally {
@@ -90,6 +100,7 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
               type='button'
               aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
               aria-busy={isFavoriteUpdating}
+              disabled={isFavoriteUpdating || isRemoving}
               onClick={onFavoriteClick}
             >
               <svg
