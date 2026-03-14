@@ -159,105 +159,115 @@ export default function AppointmentModal({
       </figure>
 
       <form className={css.form} onSubmit={form.handleSubmit(onSubmit)}>
-        <label className={css.field}>
-          <span className={css.visuallyHidden}>Name</span>
-          <input
-            className={`${css.input} ${shouldShowErrors && errors.name ? css.inputError : ''}`}
-            aria-invalid={shouldShowErrors && Boolean(errors.name)}
-            aria-describedby={
-              shouldShowErrors && errors.name ? 'appointment-name-error' : undefined
-            }
-            type='text'
-            placeholder='Name'
-            {...form.register('name')}
-          />
-          <span id='appointment-name-error' className={css.error}>
-            {shouldShowErrors ? errors.name?.message : ''}
-          </span>
-        </label>
-
-        <label className={css.field}>
-          <span className={css.visuallyHidden}>Email</span>
-          <input
-            className={`${css.input} ${shouldShowErrors && errors.email ? css.inputError : ''}`}
-            aria-invalid={shouldShowErrors && Boolean(errors.email)}
-            aria-describedby={
-              shouldShowErrors && errors.email ? 'appointment-email-error' : undefined
-            }
-            type='email'
-            placeholder='Email'
-            {...form.register('email')}
-          />
-          <span id='appointment-email-error' className={css.error}>
-            {shouldShowErrors ? errors.email?.message : ''}
-          </span>
-        </label>
-
-        <div className={css.row}>
+        <div className={css.fieldsScrollArea}>
           <label className={css.field}>
-            <span className={css.visuallyHidden}>Phone</span>
+            <span className={css.visuallyHidden}>Name</span>
             <input
-              className={`${css.input} ${shouldShowErrors && errors.phone ? css.inputError : ''}`}
-              aria-invalid={shouldShowErrors && Boolean(errors.phone)}
+              className={`${css.input} ${shouldShowErrors && errors.name ? css.inputError : ''}`}
+              aria-invalid={shouldShowErrors && Boolean(errors.name)}
               aria-describedby={
-                shouldShowErrors && errors.phone ? 'appointment-phone-error' : undefined
+                shouldShowErrors && errors.name
+                  ? 'appointment-name-error'
+                  : undefined
               }
-              type='tel'
-              placeholder='+380'
-              {...phoneField}
-              onChange={onPhoneChange}
-              onPaste={onPhonePaste}
-              onFocus={onPhoneFocus}
+              type='text'
+              placeholder='Name'
+              {...form.register('name')}
             />
-            <span id='appointment-phone-error' className={css.error}>
-              {shouldShowErrors ? errors.phone?.message : ''}
+            <span id='appointment-name-error' className={css.error}>
+              {shouldShowErrors ? errors.name?.message : ''}
             </span>
           </label>
 
-          <div className={`${css.field} ${css.timeField}`}>
-            <span className={css.visuallyHidden}>Meeting time</span>
-            <AppointmentTimePicker
-              value={selectedTime}
-              options={APPOINTMENT_TIME_OPTIONS}
-              error={shouldShowErrors ? errors.time?.message : ''}
-              hasError={shouldShowErrors && Boolean(errors.time)}
-              buttonId='appointment-time-button'
-              errorId='appointment-time-error'
-              listboxId='appointment-time-listbox'
-              onSelect={(time) => {
-                form.setValue('time', time, {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                  shouldTouch: true,
-                });
-              }}
+          <label className={css.field}>
+            <span className={css.visuallyHidden}>Email</span>
+            <input
+              className={`${css.input} ${shouldShowErrors && errors.email ? css.inputError : ''}`}
+              aria-invalid={shouldShowErrors && Boolean(errors.email)}
+              aria-describedby={
+                shouldShowErrors && errors.email
+                  ? 'appointment-email-error'
+                  : undefined
+              }
+              type='email'
+              placeholder='Email'
+              {...form.register('email')}
             />
-            <input type='hidden' {...form.register('time')} />
+            <span id='appointment-email-error' className={css.error}>
+              {shouldShowErrors ? errors.email?.message : ''}
+            </span>
+          </label>
+
+          <div className={css.row}>
+            <label className={css.field}>
+              <span className={css.visuallyHidden}>Phone</span>
+              <input
+                className={`${css.input} ${shouldShowErrors && errors.phone ? css.inputError : ''}`}
+                aria-invalid={shouldShowErrors && Boolean(errors.phone)}
+                aria-describedby={
+                  shouldShowErrors && errors.phone
+                    ? 'appointment-phone-error'
+                    : undefined
+                }
+                type='tel'
+                placeholder='+380'
+                {...phoneField}
+                onChange={onPhoneChange}
+                onPaste={onPhonePaste}
+                onFocus={onPhoneFocus}
+              />
+              <span id='appointment-phone-error' className={css.error}>
+                {shouldShowErrors ? errors.phone?.message : ''}
+              </span>
+            </label>
+
+            <div className={`${css.field} ${css.timeField}`}>
+              <span className={css.visuallyHidden}>Meeting time</span>
+              <AppointmentTimePicker
+                value={selectedTime}
+                options={APPOINTMENT_TIME_OPTIONS}
+                error={shouldShowErrors ? errors.time?.message : ''}
+                hasError={shouldShowErrors && Boolean(errors.time)}
+                buttonId='appointment-time-button'
+                errorId='appointment-time-error'
+                listboxId='appointment-time-listbox'
+                onSelect={(time) => {
+                  form.setValue('time', time, {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                    shouldTouch: true,
+                  });
+                }}
+              />
+              <input type='hidden' {...form.register('time')} />
+            </div>
           </div>
+
+          <label className={css.field}>
+            <span className={css.visuallyHidden}>Comment</span>
+            <textarea
+              className={`${css.textarea} ${shouldShowErrors && errors.comment ? css.inputError : ''}`}
+              aria-invalid={shouldShowErrors && Boolean(errors.comment)}
+              aria-describedby={
+                shouldShowErrors && errors.comment
+                  ? 'appointment-comment-error'
+                  : undefined
+              }
+              rows={4}
+              placeholder='Comment'
+              {...form.register('comment')}
+            />
+            <span id='appointment-comment-error' className={css.error}>
+              {shouldShowErrors ? errors.comment?.message : ''}
+            </span>
+          </label>
         </div>
 
-        <label className={css.field}>
-          <span className={css.visuallyHidden}>Comment</span>
-          <textarea
-            className={`${css.textarea} ${shouldShowErrors && errors.comment ? css.inputError : ''}`}
-            aria-invalid={shouldShowErrors && Boolean(errors.comment)}
-            aria-describedby={
-              shouldShowErrors && errors.comment
-                ? 'appointment-comment-error'
-                : undefined
-            }
-            rows={4}
-            placeholder='Comment'
-            {...form.register('comment')}
-          />
-          <span id='appointment-comment-error' className={css.error}>
-            {shouldShowErrors ? errors.comment?.message : ''}
-          </span>
-        </label>
-
-        <button className={css.submitButton} type='submit'>
-          Send
-        </button>
+        <div className={css.formActions}>
+          <button className={css.submitButton} type='submit'>
+            Send
+          </button>
+        </div>
       </form>
     </Modal>
   );

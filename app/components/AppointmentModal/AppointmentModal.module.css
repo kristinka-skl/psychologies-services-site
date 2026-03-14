@@ -1,6 +1,6 @@
 .description {
   margin-top: var(--space-4);
-  margin-bottom: var(--space-20);
+  margin-bottom: var(--space-12);
   color: var(--color-text-muted-50);
   font-weight: var(--font-weight-regular);
   font-size: 12px;
@@ -12,7 +12,7 @@
   align-items: center;
   gap: var(--space-14);
   margin: 0;
-  margin-bottom: var(--space-20);
+  margin-bottom: var(--space-16);
 }
 
 .psychologistAvatar {
@@ -37,8 +37,14 @@
 }
 
 .form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.fieldsScrollArea {
   display: grid;
-  gap: var(--space-16);
+  gap: var(--space-12);
 }
 
 .field {
@@ -72,7 +78,7 @@
 }
 
 .input {
-  height: 48px;
+  height: 44px;
   padding: 0 var(--space-16);
 }
 
@@ -99,14 +105,14 @@
 }
 
 .textarea {
-  min-height: 88px;
+  min-height: 80px;
   resize: none;
-  padding: var(--space-16);
+  padding: var(--space-14);
 }
 
 .row {
   display: grid;
-  gap: var(--space-16);
+  gap: var(--space-12);
 }
 
 .timeField {
@@ -127,8 +133,9 @@
 }
 
 .submitButton {
-  margin-top: 40px;
-  height: 48px;
+  width: 100%;
+  margin-top: var(--space-12);
+  height: 44px;
   border: 0;
   border-radius: var(--radius-30);
   background: var(--color-brand);
@@ -150,9 +157,30 @@
   outline-offset: 2px;
 }
 
+.formActions {
+  padding-top: var(--space-8);
+}
+
 @media (min-width: 768px) {
+  .form {
+    gap: var(--space-16);
+  }
+
+  .fieldsScrollArea {
+    gap: var(--space-16);
+  }
+
+  .formActions {
+    padding-top: 0;
+  }
+
   .description {
+    margin-bottom: var(--space-20);
     font-size: var(--font-size-16);
+  }
+
+  .psychologistBlock {
+    margin-bottom: var(--space-20);
   }
 
   .psychologistLabel {
