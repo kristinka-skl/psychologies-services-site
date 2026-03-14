@@ -9,6 +9,7 @@ import { getPsychologistsByIds } from '@/app/lib/psychologistsApi';
 import { sortPsychologists, SortValue } from '@/app/lib/sortPsychologists';
 import { useFavoritesStore } from '@/app/store/favoritesStore';
 import PsychologistCard from '@/app/components/PsychologistCard/PsychologistCard';
+import Loader from '@/app/components/Loader/Loader';
 import { Psychologist } from '@/app/types/psychologist';
 import css from '@/app/favorites/page.module.css';
 
@@ -208,7 +209,7 @@ export default function FavoritesPage() {
       <main className={css.page}>
         <section className={css.container}>
           <h1 className={css.visuallyHidden}>Favorites</h1>
-          <p className={css.emptyText}>Loading favorites...</p>
+          <Loader label='Loading favorites' />
         </section>
       </main>
     );

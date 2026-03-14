@@ -51,6 +51,8 @@ export default function AuthModal() {
   const hasRegisterNameError = Boolean(registerErrors.name?.message);
   const hasRegisterEmailError = Boolean(registerErrors.email?.message);
   const hasRegisterPasswordError = Boolean(registerErrors.password?.message);
+  const isLoginSubmitting = loginForm.formState.isSubmitting;
+  const isRegisterSubmitting = registerForm.formState.isSubmitting;
   const descriptionText = isRegister
     ? 'Thank you for your interest in our platform! In order to register, we need some information. Please provide us with the following information.'
     : 'Welcome back! Please enter your credentials to access your account and continue your search for a psychologist.';
@@ -154,6 +156,7 @@ export default function AuthModal() {
               className={css.passwordToggle}
               type='button'
               aria-label={passwordToggleLabel}
+              disabled={isRegisterSubmitting}
               onClick={() => setIsPasswordVisible((prev) => !prev)}
             >
               <svg className={css.passwordToggleIcon} aria-hidden='true'>
@@ -165,8 +168,12 @@ export default function AuthModal() {
             </span>
           </label>
 
-          <button className={css.submitButton} type='submit'>
-            Register
+          <button
+            className={css.submitButton}
+            type='submit'
+            disabled={isRegisterSubmitting}
+          >
+            {isRegisterSubmitting ? 'Registering...' : 'Register'}
           </button>
         </form>
       ) : (
@@ -205,6 +212,7 @@ export default function AuthModal() {
               className={css.passwordToggle}
               type='button'
               aria-label={passwordToggleLabel}
+              disabled={isLoginSubmitting}
               onClick={() => setIsPasswordVisible((prev) => !prev)}
             >
               <svg className={css.passwordToggleIcon} aria-hidden='true'>
@@ -216,8 +224,12 @@ export default function AuthModal() {
             </span>
           </label>
 
-          <button className={css.submitButton} type='submit'>
-            Log in
+          <button
+            className={css.submitButton}
+            type='submit'
+            disabled={isLoginSubmitting}
+          >
+            {isLoginSubmitting ? 'Logging in...' : 'Log in'}
           </button>
         </form>
       )}
