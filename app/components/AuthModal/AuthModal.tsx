@@ -123,6 +123,7 @@ export default function AuthModal() {
               aria-invalid={hasRegisterNameError}
               aria-describedby='register-name-error'
               type='text'
+              autoComplete='name'
               placeholder='Name'
               {...registerForm.register('name')}
             />
@@ -138,6 +139,7 @@ export default function AuthModal() {
               aria-invalid={hasRegisterEmailError}
               aria-describedby='register-email-error'
               type='email'
+              autoComplete='email'
               placeholder='Email'
               {...registerForm.register('email')}
             />
@@ -153,6 +155,7 @@ export default function AuthModal() {
               aria-invalid={hasRegisterPasswordError}
               aria-describedby='register-password-error'
               type={passwordInputType}
+              autoComplete='new-password'
               placeholder='Password'
               {...registerForm.register('password')}
             />
@@ -194,6 +197,7 @@ export default function AuthModal() {
               aria-invalid={hasLoginEmailError}
               aria-describedby='login-email-error'
               type='email'
+              autoComplete='email'
               placeholder='Email'
               {...loginForm.register('email')}
             />
@@ -209,6 +213,7 @@ export default function AuthModal() {
               aria-invalid={hasLoginPasswordError}
               aria-describedby='login-password-error'
               type={passwordInputType}
+              autoComplete='current-password'
               placeholder='Password'
               {...loginForm.register('password')}
             />

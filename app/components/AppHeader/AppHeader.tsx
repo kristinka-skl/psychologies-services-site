@@ -16,6 +16,7 @@ export default function AppHeader() {
   const openAuthModal = useUiStore((state) => state.openAuthModal);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const drawerId = 'mobile-navigation-drawer';
 
   const closeDrawer = () => setIsDrawerOpen(false);
 
@@ -119,6 +120,8 @@ export default function AppHeader() {
           className={css.burgerButton}
           type='button'
           aria-label='Open menu'
+          aria-expanded={isDrawerOpen}
+          aria-controls={drawerId}
           onClick={() => setIsDrawerOpen(true)}
         >
           <svg width='20' height='20' aria-hidden='true'>
@@ -130,6 +133,7 @@ export default function AppHeader() {
       {isDrawerOpen ? (
         <div className={css.drawerBackdrop} onClick={closeDrawer} role='presentation'>
           <aside
+            id={drawerId}
             className={css.drawer}
             onClick={(event) => event.stopPropagation()}
             aria-label='Mobile menu'
@@ -149,7 +153,7 @@ export default function AppHeader() {
                 <use href='/sprite.svg#icon-close' />
               </svg>
             </button>
-            <nav className={css.drawerNav}>
+            <nav className={css.drawerNav} aria-label='Mobile navigation'>
               <Link href='/' onClick={closeDrawer}>
                 Home
               </Link>

@@ -53,17 +53,22 @@ export default function PsychologistsClientPage() {
 
   return (
     <main className={css.page}>
-      <section className={css.container}>
+      <section className={css.container} aria-labelledby='psychologists-page-title'>
+        <h1 id='psychologists-page-title' className={css.visuallyHidden}>
+          Psychologists
+        </h1>
         <SortFilter value={sortValue} onChange={handleSortChange} />
 
         {isLoading ? (
           <Loader label='Loading psychologists' />
         ) : (
-          <div className={css.cards}>
+          <ul className={css.cards} aria-label='Psychologists list'>
             {visiblePsychologists.map((psychologist) => (
-              <PsychologistCard key={psychologist.id} psychologist={psychologist} />
+              <li key={psychologist.id}>
+                <PsychologistCard psychologist={psychologist} />
+              </li>
             ))}
-          </div>
+          </ul>
         )}
 
         {!isLoading && hasNextPage ? (

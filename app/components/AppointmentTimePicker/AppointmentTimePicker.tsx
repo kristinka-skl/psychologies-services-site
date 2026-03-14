@@ -9,6 +9,9 @@ interface AppointmentTimePickerProps {
   hasError?: boolean;
   options: string[];
   onSelect: (value: string) => void;
+  buttonId?: string;
+  errorId?: string;
+  listboxId?: string;
 }
 
 export default function AppointmentTimePicker({
@@ -17,6 +20,9 @@ export default function AppointmentTimePicker({
   hasError = false,
   options,
   onSelect,
+  buttonId,
+  errorId,
+  listboxId = 'appointment-time-listbox',
 }: AppointmentTimePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const pickerRef = useRef<HTMLDivElement>(null);
@@ -63,11 +69,14 @@ export default function AppointmentTimePicker({
   return (
     <div className={css.wrapper} ref={pickerRef}>
       <button
+        id={buttonId}
         ref={buttonRef}
         className={`${css.button} ${hasError ? css.buttonError : ''}`}
         type='button'
         aria-haspopup='listbox'
         aria-expanded={isOpen}
+        aria-controls={listboxId}
+        aria-describedby={hasError && error ? errorId : undefined}
         aria-label='Open meeting time options'
         onClick={() => {
           if (isOpen) {
@@ -77,6 +86,12 @@ export default function AppointmentTimePicker({
           openDropdown();
         }}
         onKeyDown={(event) => {
+          if (event.key === 'Escape') {
+            event.preventDefault();
+            setIsOpen(false);
+            return;
+          }
+
           if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
             event.preventDefault();
             if (!isOpen) {
@@ -100,12 +115,20 @@ export default function AppointmentTimePicker({
         </svg>
       </button>
 
-      <span className={css.error}>{error}</span>
+      <span id={errorId} className={css.error}>
+        {error}
+      </span>
 
       {isOpen ? (
-        <div className={css.dropdown} role='listbox' aria-label='Meeting time'>
+        <div className={css.dropdown}>
           <p className={css.dropdownTitle}>Meeting time</p>
-          <ul className={css.list}>
+          <ul
+            id={listboxId}
+            className={css.list}
+            role='listbox'
+            aria-label='Meeting time'
+            aria-labelledby={buttonId}
+          >
             {options.map((time, index) => (
               <li key={time}>
                 <button

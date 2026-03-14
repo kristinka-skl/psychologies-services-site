@@ -23,7 +23,10 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className={css.heroMedia}>
+        <section className={css.heroMedia} aria-labelledby='home-hero-media-title'>
+          <h2 id='home-hero-media-title' className={css.visuallyHidden}>
+            Hero illustration
+          </h2>
           <div className={css.heroImageWrap}>
             <Image
               className={css.heroImage}
@@ -58,7 +61,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </section>
     </main>
   );

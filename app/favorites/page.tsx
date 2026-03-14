@@ -182,10 +182,7 @@ export default function FavoritesPage() {
     }
   }
 
-  function handleCardTransitionEnd(
-    event: TransitionEvent<HTMLDivElement>,
-    id: string
-  ) {
+  function handleCardTransitionEnd(event: TransitionEvent<HTMLLIElement>, id: string) {
     if (event.target !== event.currentTarget) {
       return;
     }
@@ -207,8 +204,10 @@ export default function FavoritesPage() {
   if (loading || (isLoading && !data)) {
     return (
       <main className={css.page}>
-        <section className={css.container}>
-          <h1 className={css.visuallyHidden}>Favorites</h1>
+        <section className={css.container} aria-labelledby='favorites-page-title'>
+          <h1 id='favorites-page-title' className={css.visuallyHidden}>
+            Favorites
+          </h1>
           <Loader label='Loading favorites' />
         </section>
       </main>
@@ -221,14 +220,16 @@ export default function FavoritesPage() {
 
   return (
     <main className={css.page}>
-      <section className={css.container}>
-        <h1 className={css.visuallyHidden}>Favorites</h1>
+      <section className={css.container} aria-labelledby='favorites-page-title'>
+        <h1 id='favorites-page-title' className={css.visuallyHidden}>
+          Favorites
+        </h1>
         <SortFilter value={sortValue} onChange={handleSortChange} />
 
         {renderedFavoritePsychologists.length ? (
-          <div className={css.cards}>
+          <ul className={css.cards} aria-label='Favorite psychologists list'>
             {renderedFavoritePsychologists.map((psychologist) => (
-              <div
+              <li
                 key={psychologist.id}
                 className={`${css.cardItem} ${removingIdSet.has(psychologist.id) ? css.cardItemRemoving : ''}`}
                 onTransitionEnd={(event) =>
@@ -240,9 +241,9 @@ export default function FavoritesPage() {
                   isRemoving={removingIdSet.has(psychologist.id)}
                   onRequestUnfavorite={handleRequestUnfavorite}
                 />
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         ) : (
           <p className={css.emptyText}>
             You have no favorite psychologists yet. Add them from the Psychologists page.

@@ -32,6 +32,7 @@ export default function PsychologistCard({
   const [isExpanded, setIsExpanded] = useState(false);
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
   const [isFavoriteUpdating, setIsFavoriteUpdating] = useState(false);
+  const reviewsHeadingId = `psychologist-reviews-${psychologist.id}`;
 
   const onFavoriteClick = async () => {
     if (isFavoriteUpdating || isRemoving) {
@@ -141,11 +142,13 @@ export default function PsychologistCard({
         </p>
 
         {isExpanded ? (
-          <div className={css.reviews}>
-            <h4 className={css.reviewsTitle}>Reviews</h4>
-            <div className={css.reviewsList}>
+          <section className={css.reviews} aria-labelledby={reviewsHeadingId}>
+            <h4 id={reviewsHeadingId} className={css.reviewsTitle}>
+              Reviews
+            </h4>
+            <ul className={css.reviewsList}>
               {psychologist.reviews.map((review) => (
-                <div key={review.reviewer} className={css.reviewItem}>
+                <li key={review.reviewer} className={css.reviewItem}>
                   <div className={css.reviewTop}>
                     <span className={css.reviewerBadge} aria-hidden='true'>
                       {review.reviewer.charAt(0)}
@@ -166,9 +169,9 @@ export default function PsychologistCard({
                     </div>
                   </div>
                   <p className={css.reviewComment}>{review.comment}</p>
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
             <button
               className={css.appointmentButton}
               type='button'
@@ -177,7 +180,7 @@ export default function PsychologistCard({
             >
               Make an appointment
             </button>
-          </div>
+          </section>
         ) : null}
 
         <button

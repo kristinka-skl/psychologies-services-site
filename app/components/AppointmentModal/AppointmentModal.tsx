@@ -143,7 +143,7 @@ export default function AppointmentModal({
         psychologist. We guarantee confidentiality and respect for your privacy.
       </p>
 
-      <div className={css.psychologistBlock}>
+      <figure className={css.psychologistBlock}>
         <Image
           className={css.psychologistAvatar}
           src={psychologistAvatarUrl}
@@ -152,11 +152,11 @@ export default function AppointmentModal({
           height={44}
           unoptimized
         />
-        <div>
+        <figcaption>
           <p className={css.psychologistLabel}>Your psychologist</p>
           <p className={css.psychologistName}>{psychologistName}</p>
-        </div>
-      </div>
+        </figcaption>
+      </figure>
 
       <form className={css.form} onSubmit={form.handleSubmit(onSubmit)}>
         <label className={css.field}>
@@ -164,11 +164,14 @@ export default function AppointmentModal({
           <input
             className={`${css.input} ${shouldShowErrors && errors.name ? css.inputError : ''}`}
             aria-invalid={shouldShowErrors && Boolean(errors.name)}
+            aria-describedby={
+              shouldShowErrors && errors.name ? 'appointment-name-error' : undefined
+            }
             type='text'
             placeholder='Name'
             {...form.register('name')}
           />
-          <span className={css.error}>
+          <span id='appointment-name-error' className={css.error}>
             {shouldShowErrors ? errors.name?.message : ''}
           </span>
         </label>
@@ -178,11 +181,14 @@ export default function AppointmentModal({
           <input
             className={`${css.input} ${shouldShowErrors && errors.email ? css.inputError : ''}`}
             aria-invalid={shouldShowErrors && Boolean(errors.email)}
+            aria-describedby={
+              shouldShowErrors && errors.email ? 'appointment-email-error' : undefined
+            }
             type='email'
             placeholder='Email'
             {...form.register('email')}
           />
-          <span className={css.error}>
+          <span id='appointment-email-error' className={css.error}>
             {shouldShowErrors ? errors.email?.message : ''}
           </span>
         </label>
@@ -193,6 +199,9 @@ export default function AppointmentModal({
             <input
               className={`${css.input} ${shouldShowErrors && errors.phone ? css.inputError : ''}`}
               aria-invalid={shouldShowErrors && Boolean(errors.phone)}
+              aria-describedby={
+                shouldShowErrors && errors.phone ? 'appointment-phone-error' : undefined
+              }
               type='tel'
               placeholder='+380'
               {...phoneField}
@@ -200,7 +209,7 @@ export default function AppointmentModal({
               onPaste={onPhonePaste}
               onFocus={onPhoneFocus}
             />
-            <span className={css.error}>
+            <span id='appointment-phone-error' className={css.error}>
               {shouldShowErrors ? errors.phone?.message : ''}
             </span>
           </label>
@@ -212,6 +221,9 @@ export default function AppointmentModal({
               options={APPOINTMENT_TIME_OPTIONS}
               error={shouldShowErrors ? errors.time?.message : ''}
               hasError={shouldShowErrors && Boolean(errors.time)}
+              buttonId='appointment-time-button'
+              errorId='appointment-time-error'
+              listboxId='appointment-time-listbox'
               onSelect={(time) => {
                 form.setValue('time', time, {
                   shouldValidate: true,
@@ -229,11 +241,16 @@ export default function AppointmentModal({
           <textarea
             className={`${css.textarea} ${shouldShowErrors && errors.comment ? css.inputError : ''}`}
             aria-invalid={shouldShowErrors && Boolean(errors.comment)}
+            aria-describedby={
+              shouldShowErrors && errors.comment
+                ? 'appointment-comment-error'
+                : undefined
+            }
             rows={4}
             placeholder='Comment'
             {...form.register('comment')}
           />
-          <span className={css.error}>
+          <span id='appointment-comment-error' className={css.error}>
             {shouldShowErrors ? errors.comment?.message : ''}
           </span>
         </label>
