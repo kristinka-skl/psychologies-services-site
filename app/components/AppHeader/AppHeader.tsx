@@ -122,9 +122,9 @@ export default function AppHeader() {
           aria-label='Open menu'
           onClick={() => setIsDrawerOpen(true)}
         >
-          <span />
-          <span />
-          <span />
+          <svg width='20' height='20' aria-hidden='true'>
+            <use href='/sprite.svg#icon-menu' />
+          </svg>
         </button>
       </div>
 
@@ -135,8 +135,20 @@ export default function AppHeader() {
             onClick={(event) => event.stopPropagation()}
             aria-label='Mobile menu'
           >
-            <button className={css.drawerClose} type='button' onClick={closeDrawer}>
-              ×
+            <button
+              className={css.drawerClose}
+              type='button'
+              onClick={closeDrawer}
+              aria-label='Close menu'
+            >
+              <svg
+                className={css.drawerCloseIcon}
+                width='20'
+                height='20'
+                aria-hidden='true'
+              >
+                <use href='/sprite.svg#icon-close' />
+              </svg>
             </button>
             <nav className={css.drawerNav}>
               <Link href='/' onClick={closeDrawer}>

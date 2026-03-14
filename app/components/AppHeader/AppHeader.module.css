@@ -43,22 +43,21 @@
 .burgerButton {
   width: 44px;
   height: 44px;
-  border: 1px solid var(--color-border-primary);
+  border: 0;
   border-radius: var(--radius-14);
-  display: grid;
-  place-items: center;
-  gap: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
+  color: var(--color-text-primary);
   cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
-.burgerButton span {
-  width: 18px;
-  height: 2px;
-  background: var(--color-text-primary);
+.burgerButton svg {
+  display: block;
+  width: 20px;
+  height: 20px;
 }
 
 .drawerBackdrop {
@@ -80,14 +79,28 @@
 
 .drawerClose {
   align-self: flex-end;
-  border: 0;
-  background: transparent;
-  font-size: 30px;
+  margin-top: -10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 44px;
   height: 44px;
+  padding: 0;
+  border: 0;
   border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-primary);
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.drawerCloseIcon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
 }
 
 .drawerNav {
@@ -184,7 +197,11 @@
 .drawerClose:hover,
 .drawerClose:focus-visible {
   background: var(--color-brand-softest);
-  border-color: var(--color-brand);
+}
+
+.drawerClose:hover,
+.drawerClose:focus-visible {
+  color: var(--color-brand);
 }
 
 .burgerButton:focus-visible,
