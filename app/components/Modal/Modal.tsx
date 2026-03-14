@@ -4,6 +4,10 @@ import { ReactNode, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import css from '@/app/components/Modal/Modal.module.css';
 
+let openModalCount = 0;
+let previousBodyOverflow = '';
+let previousHtmlOverflow = '';
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -30,11 +34,21 @@ export default function Modal({
       }
     };
 
-    document.body.style.overflow = 'hidden';
+    if (openModalCount === 0) {
+      previousBodyOverflow = document.body.style.overflow;
+      previousHtmlOverflow = document.documentElement.style.overflow;
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    }
+    openModalCount += 1;
     window.addEventListener('keydown', onKeyDown);
 
     return () => {
-      document.body.style.overflow = '';
+      openModalCount = Math.max(0, openModalCount - 1);
+      if (openModalCount === 0) {
+        document.body.style.overflow = previousBodyOverflow;
+        document.documentElement.style.overflow = previousHtmlOverflow;
+      }
       window.removeEventListener('keydown', onKeyDown);
     };
   }, [isOpen, onClose]);
@@ -62,7 +76,9 @@ export default function Modal({
           onClick={onClose}
           aria-label='Close modal'
         >
-          ×
+          <svg className={css.closeIcon} width='20' height='20' aria-hidden='true'>
+            <use href='/sprite.svg#icon-close' />
+          </svg>
         </button>
         <h2 className={css.title}>{title}</h2>
         {children}
