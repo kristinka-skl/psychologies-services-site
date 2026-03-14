@@ -3,7 +3,7 @@
   margin-bottom: var(--space-20);
   color: var(--color-text-muted-50);
   font-weight: var(--font-weight-regular);
-  font-size: var(--font-size-16);
+  font-size: 12px;
   line-height: 1.25;
 }
 
@@ -23,7 +23,7 @@
 
 .psychologistLabel {
   color: var(--color-text-muted-50);
-  font-size: 12px;
+  font-size: 14px;
   line-height: var(--line-height-18);
   margin-bottom: var(--space-4);
 }
@@ -150,6 +150,14 @@
 }
 
 @media (min-width: 768px) {
+  .description {
+    font-size: var(--font-size-16);
+  }
+
+  .psychologistLabel {
+    font-size: 12px;
+  }
+
   .psychologistAvatar {
     width: 44px;
     height: 44px;

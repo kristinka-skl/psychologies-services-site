@@ -25,6 +25,12 @@
   padding: var(--space-20);
 }
 
+.modalAppointment .title {
+  margin-top: 22px;
+  font-size: 22px;
+  line-height: 1.15;
+}
+
 .closeButton {
   position: absolute;
   top: var(--space-12);
@@ -90,6 +96,12 @@
     max-width: 599px;
     border-radius: var(--radius-30);
     padding: var(--space-48);
+  }
+
+  .modalAppointment .title {
+    margin-top: 0;
+    font-size: 40px;
+    line-height: 1.2;
   }
 }
 
