@@ -93,10 +93,27 @@
   position: absolute;
   top: var(--space-16);
   right: var(--space-16);
+  border-radius: var(--radius-pill);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .favoriteButtonActive {
   color: var(--color-brand);
+}
+
+.favoriteButton:hover,
+.favoriteButton:focus-visible,
+.favoriteButtonActive:hover,
+.favoriteButtonActive:focus-visible {
+  background: var(--color-brand-softest);
+}
+
+.favoriteButton:focus-visible,
+.favoriteButtonActive:focus-visible {
+  outline: var(--focus-outline-brand);
+  outline-offset: 2px;
 }
 
 .favoriteButtonLoading {
@@ -253,6 +270,17 @@
   font-size: var(--font-size-16);
   margin-top: var(--space-16);
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.appointmentButton:hover,
+.appointmentButton:focus-visible {
+  background: var(--color-brand-hover);
+}
+
+.appointmentButton:focus-visible {
+  outline: var(--focus-outline-brand);
+  outline-offset: 2px;
 }
 
 @media (min-width: 768px) {

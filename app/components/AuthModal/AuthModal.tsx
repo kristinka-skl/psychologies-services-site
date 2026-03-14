@@ -2,7 +2,7 @@
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import getAuthErrorMessage from '@/app/lib/getAuthErrorMessage';
 import {
@@ -22,6 +22,7 @@ export default function AuthModal() {
   const closeAuthModal = useUiStore((state) => state.closeAuthModal);
   const signIn = useAuthStore((state) => state.signIn);
   const signUp = useAuthStore((state) => state.signUp);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const isRegister = authModalMode === 'register';
 
@@ -51,6 +52,11 @@ export default function AuthModal() {
   const descriptionText = isRegister
     ? 'Thank you for your interest in our platform! In order to register, we need some information. Please provide us with the following information.'
     : 'Welcome back! Please enter your credentials to access your account and continue your search for a psychologist.';
+  const passwordInputType = isPasswordVisible ? 'text' : 'password';
+  const passwordToggleLabel = isPasswordVisible
+    ? 'Hide password'
+    : 'Show password';
+  const passwordToggleIcon = isPasswordVisible ? 'icon-eye-off' : 'icon-eye';
 
   const onLoginSubmit = async (values: AuthLoginValues) => {
     try {
@@ -97,6 +103,7 @@ export default function AuthModal() {
 
   useEffect(() => {
     if (!isAuthModalOpen) {
+      setIsPasswordVisible(false);
       return;
     }
 
@@ -158,13 +165,23 @@ export default function AuthModal() {
           <label className={css.field}>
             <span className={css.visuallyHidden}>Password</span>
             <input
-              className={`${css.input} ${hasRegisterPasswordError ? css.inputError : ''}`}
+              className={`${css.input} ${css.passwordInput} ${hasRegisterPasswordError ? css.inputError : ''}`}
               aria-invalid={hasRegisterPasswordError}
               aria-describedby='register-password-error'
-              type='password'
+              type={passwordInputType}
               placeholder='Password'
               {...registerForm.register('password')}
             />
+            <button
+              className={css.passwordToggle}
+              type='button'
+              aria-label={passwordToggleLabel}
+              onClick={() => setIsPasswordVisible((prev) => !prev)}
+            >
+              <svg className={css.passwordToggleIcon} aria-hidden='true'>
+                <use href={`/sprite.svg#${passwordToggleIcon}`} />
+              </svg>
+            </button>
             <span id='register-password-error' className={css.error} role='alert'>
               {registerErrors.password?.message}
             </span>
@@ -199,13 +216,23 @@ export default function AuthModal() {
           <label className={css.field}>
             <span className={css.visuallyHidden}>Password</span>
             <input
-              className={`${css.input} ${hasLoginPasswordError ? css.inputError : ''}`}
+              className={`${css.input} ${css.passwordInput} ${hasLoginPasswordError ? css.inputError : ''}`}
               aria-invalid={hasLoginPasswordError}
               aria-describedby='login-password-error'
-              type='password'
+              type={passwordInputType}
               placeholder='Password'
               {...loginForm.register('password')}
             />
+            <button
+              className={css.passwordToggle}
+              type='button'
+              aria-label={passwordToggleLabel}
+              onClick={() => setIsPasswordVisible((prev) => !prev)}
+            >
+              <svg className={css.passwordToggleIcon} aria-hidden='true'>
+                <use href={`/sprite.svg#${passwordToggleIcon}`} />
+              </svg>
+            </button>
             <span id='login-password-error' className={css.error} role='alert'>
               {loginErrors.password?.message}
             </span>

@@ -1,5 +1,5 @@
 .page {
-  background: var(--color-bg-page);
+  background: var(--background);
   min-height: calc(100dvh - 72px);
   padding: 64px 0 var(--space-40);
 }
@@ -44,6 +44,17 @@
   color: var(--color-bg-surface);
   font-size: var(--font-size-16);
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.loadMoreButton:not(:disabled):hover,
+.loadMoreButton:not(:disabled):focus-visible {
+  background: var(--color-brand-hover);
+}
+
+.loadMoreButton:focus-visible {
+  outline: var(--focus-outline-brand);
+  outline-offset: 2px;
 }
 
 .emptyText {
