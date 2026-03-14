@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { ChangeEvent, ClipboardEvent, FocusEvent, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Image from 'next/image';
 import { useForm, useWatch } from 'react-hook-form';
@@ -24,6 +24,19 @@ export default function AppointmentModal({
   psychologistAvatarUrl,
   onClose,
 }: AppointmentModalProps) {
+  const sanitizePhoneValue = (value: string) => {
+    const allowedCharactersOnly = value.replace(/[^\d+\s()-]/g, '');
+
+    if (!allowedCharactersOnly) {
+      return '';
+    }
+
+    const hasLeadingPlus = allowedCharactersOnly.startsWith('+');
+    const valueWithoutPluses = allowedCharactersOnly.replace(/\+/g, '');
+
+    return hasLeadingPlus ? `+${valueWithoutPluses}` : valueWithoutPluses;
+  };
+
   const form = useForm<AppointmentValues>({
     resolver: yupResolver(appointmentSchema),
     mode: 'onTouched',
@@ -40,6 +53,7 @@ export default function AppointmentModal({
     control: form.control,
     name: 'time',
   });
+  const phoneField = form.register('phone');
   const errors = form.formState.errors;
   const shouldShowErrors = form.formState.submitCount > 0;
 
@@ -55,6 +69,65 @@ export default function AppointmentModal({
     notifySuccess('appointmentRequestSent', { psychologistName });
     form.reset();
     onClose();
+  };
+
+  const onPhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const sanitizedValue = sanitizePhoneValue(event.target.value);
+
+    form.setValue('phone', sanitizedValue, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  };
+
+  const onPhonePaste = (event: ClipboardEvent<HTMLInputElement>) => {
+    event.preventDefault();
+
+    const input = event.currentTarget;
+    const start = input.selectionStart ?? input.value.length;
+    const end = input.selectionEnd ?? input.value.length;
+    const pastedText = event.clipboardData.getData('text');
+    const rawValue =
+      input.value.slice(0, start) + pastedText + input.value.slice(end);
+    const sanitizedValue = sanitizePhoneValue(rawValue);
+    const nextCaretValue = sanitizePhoneValue(input.value.slice(0, start) + pastedText);
+    const nextCaretPosition = nextCaretValue.length;
+
+    form.setValue('phone', sanitizedValue, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+
+    requestAnimationFrame(() => {
+      input.setSelectionRange(nextCaretPosition, nextCaretPosition);
+    });
+  };
+
+  const onPhoneFocus = (event: FocusEvent<HTMLInputElement>) => {
+    const input = event.currentTarget;
+    const value = input.value;
+
+    if (!value) {
+      form.setValue('phone', '+380', {
+        shouldValidate: false,
+        shouldDirty: false,
+        shouldTouch: false,
+      });
+
+      requestAnimationFrame(() => {
+        input.setSelectionRange(4, 4);
+      });
+
+      return;
+    }
+
+    if (value === '+380') {
+      requestAnimationFrame(() => {
+        input.setSelectionRange(4, 4);
+      });
+    }
   };
 
   return (
@@ -122,7 +195,10 @@ export default function AppointmentModal({
               aria-invalid={shouldShowErrors && Boolean(errors.phone)}
               type='tel'
               placeholder='+380'
-              {...form.register('phone')}
+              {...phoneField}
+              onChange={onPhoneChange}
+              onPaste={onPhonePaste}
+              onFocus={onPhoneFocus}
             />
             <span className={css.error}>
               {shouldShowErrors ? errors.phone?.message : ''}
