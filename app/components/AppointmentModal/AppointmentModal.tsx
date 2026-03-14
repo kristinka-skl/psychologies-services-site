@@ -4,10 +4,10 @@ import { useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Image from 'next/image';
 import { useForm, useWatch } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import Modal from '@/app/components/Modal/Modal';
 import AppointmentTimePicker from '@/app/components/AppointmentTimePicker/AppointmentTimePicker';
 import { APPOINTMENT_TIME_OPTIONS } from '@/app/lib/appointmentTimeOptions';
+import { notifySuccess } from '@/app/lib/notifications';
 import { appointmentSchema, AppointmentValues } from '@/app/lib/validation';
 import css from '@/app/components/AppointmentModal/AppointmentModal.module.css';
 
@@ -52,7 +52,7 @@ export default function AppointmentModal({
   }, [isOpen, form]);
 
   const onSubmit = () => {
-    toast.success(`Request sent to ${psychologistName}`);
+    notifySuccess('appointmentRequestSent', { psychologistName });
     form.reset();
     onClose();
   };

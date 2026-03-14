@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import toast from 'react-hot-toast';
 import AppointmentModal from '@/app/components/AppointmentModal/AppointmentModal';
+import { notifyError, notifyInfo } from '@/app/lib/notifications';
 import { Psychologist } from '@/app/types/psychologist';
 import { useAuthStore } from '@/app/store/authStore';
 import { useFavoritesStore } from '@/app/store/favoritesStore';
@@ -33,7 +33,7 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
     }
 
     if (!user) {
-      toast.error('Favorites are available only for authorized users');
+      notifyInfo('favoritesRequireAuth');
       openAuthModal('login');
       return;
     }
@@ -41,8 +41,8 @@ export default function PsychologistCard({ psychologist }: PsychologistCardProps
     setIsFavoriteUpdating(true);
     try {
       await toggleFavoriteForUser(user.uid, psychologist.id);
-    } catch {
-      toast.error('Failed to update favorites. Please try again.');
+    } catch (error: unknown) {
+      notifyError(error, 'favoritesToggle');
     } finally {
       setIsFavoriteUpdating(false);
     }

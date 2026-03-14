@@ -3,8 +3,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import getAuthErrorMessage from '@/app/lib/getAuthErrorMessage';
+import {
+  notifyError,
+  notifyErrorMessage,
+  notifySuccess,
+} from '@/app/lib/notifications';
 import {
   authLoginSchema,
   authRegisterSchema,
@@ -61,22 +64,22 @@ export default function AuthModal() {
   const onLoginSubmit = async (values: AuthLoginValues) => {
     try {
       await signIn(values.email, values.password);
-      toast.success('You are logged in');
+      notifySuccess('authLoginSuccess');
       loginForm.reset();
       closeAuthModal();
     } catch (error: unknown) {
-      toast.error(getAuthErrorMessage(error, 'Login failed'));
+      notifyError(error, 'authLogin');
     }
   };
 
   const onRegisterSubmit = async (values: AuthRegisterValues) => {
     try {
       await signUp(values.name, values.email, values.password);
-      toast.success('Registration successful');
+      notifySuccess('authRegisterSuccess');
       registerForm.reset();
       closeAuthModal();
     } catch (error: unknown) {
-      toast.error(getAuthErrorMessage(error, 'Registration failed'));
+      notifyError(error, 'authRegister');
     }
   };
 
@@ -87,7 +90,7 @@ export default function AuthModal() {
       errors.email?.message ??
       errors.password?.message ??
       'Please check highlighted fields.';
-    toast.error(firstError);
+    notifyErrorMessage(firstError);
   };
 
   const onInvalidRegisterSubmit = (
@@ -98,7 +101,7 @@ export default function AuthModal() {
       errors.email?.message ??
       errors.password?.message ??
       'Please check highlighted fields.';
-    toast.error(firstError);
+    notifyErrorMessage(firstError);
   };
 
   useEffect(() => {
